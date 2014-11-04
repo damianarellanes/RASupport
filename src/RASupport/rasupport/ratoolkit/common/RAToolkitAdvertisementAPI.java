@@ -7,15 +7,15 @@ import myconet.MycoNode;
  * RAToolkit: parent of advertisement APIs (facades)
  * @author Damian Arellanes
  */
-public abstract class RAToolkitAdvertisementAPI implements RAToolkitAPI {
+public interface RAToolkitAdvertisementAPI extends RAToolkitAPI {
     
-    public abstract void advertiseRSTo(MycoNode superpeer);
+    public void advertiseRSTo(MycoNode superpeer);
     
-    public abstract void createRSInDatabase(File rsFile, String aliasSender);
+    public void receiveRS(File rsFile, String aliasSender);
     
-    public abstract void SendAttributeUpdating(String attribute, String newValue);
+    public void advertiseUpdatingTo(String attribute, String newValue);
     
-    public abstract void UpdateAttributeInDatabase(String attribute, String newValue, 
+    public void receiveUpdating(String attribute, String newValue, 
             String aliasSender);
 
 }

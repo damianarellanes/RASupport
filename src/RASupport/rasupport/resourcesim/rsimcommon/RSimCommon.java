@@ -1,4 +1,4 @@
-package RASupport.rasupport.resourcesim.common;
+package RASupport.rasupport.resourcesim.rsimcommon;
 
 import java.util.ArrayList;
 import java.util.Arrays;

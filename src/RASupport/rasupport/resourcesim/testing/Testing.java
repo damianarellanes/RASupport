@@ -4,7 +4,7 @@ import static java.lang.System.exit;
 import java.util.Iterator;
 import java.util.List;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
-import static RASupport.rasupport.resourcesim.common.RSimCommon.attributesRelation;
+import static RASupport.rasupport.resourcesim.rsimcommon.RSimCommon.attributesRelation;
 
 /**
  * ResourceSim: interface that contains all the oracles to perform testing on the module ResourceSim

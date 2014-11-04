@@ -2,7 +2,7 @@ package RASupport.rasupport.resourcesim.resourcesim;
 
 import java.util.Iterator;
 import java.util.List;
-import static RASupport.rasupport.resourcesim.common.RSimCommon.*;
+import static RASupport.rasupport.resourcesim.rsimcommon.RSimCommon.*;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
 import RASupport.rasupport.rasupportconfig.common.RASupportCommon;
 import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeTypes.*;

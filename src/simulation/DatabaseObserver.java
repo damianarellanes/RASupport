@@ -1,4 +1,4 @@
-package RASupport.simulation;
+package simulation;
 
 import java.io.IOException;
 import static java.lang.System.exit;

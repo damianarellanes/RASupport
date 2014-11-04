@@ -17,7 +17,8 @@ public class AdvertisementAgentsFactory implements AgentsFactory {
     public AdvertisementAgent create(Agents type, Object...params) {
         
         if(type == AGENT_ADVERTISEMENT_INITIAL) {
-            return new AdvertisementAgentInitial((RSpec) params[0]);
+            return new AdvertisementAgentInitial((RSpec) params[0],
+            (String) params[1], (DatabaseManager) params[2]);
         }
         else if(type == AGENT_ADVERTISEMENT_UPDATING) {
             return new AdvertisementAgentUpdating((RSpec) params[0], 

@@ -32,7 +32,7 @@ public class RAToolkitReceiver implements RASupportReceiver {
     public void simulateReceiveXML(File rsFile, String aliasSender, RASupportActions action) {
        
         if(action.equals(CREATE_RS)) {
-            advertisementAPI.createRSInDatabase(rsFile, aliasSender);
+            advertisementAPI.receiveRS(rsFile, aliasSender);
         }
     }
 
@@ -44,7 +44,7 @@ public class RAToolkitReceiver implements RASupportReceiver {
     public void simulateReceiveMessages(String aliasSender, RASupportActions action, String...messages) {
         
         if(action.equals(UPDATE_ATTRIBUTE)) {
-            advertisementAPI.UpdateAttributeInDatabase(messages[0], messages[1], aliasSender);
+            advertisementAPI.receiveUpdating(messages[0], messages[1], aliasSender);
         }
     }
 

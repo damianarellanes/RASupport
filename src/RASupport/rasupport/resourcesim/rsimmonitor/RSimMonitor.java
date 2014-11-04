@@ -11,7 +11,7 @@ import static RASupport.rasupport.rasupportconfig.random.RASupportRandomManager.
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportAttributes;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportDynamicAttributes;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
-import static RASupport.rasupport.resourcesim.common.RSimCommon.*;
+import static RASupport.rasupport.resourcesim.rsimcommon.RSimCommon.*;
 
 /**
  * RSim: Update monitor of dynamic attributes
