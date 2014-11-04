@@ -174,6 +174,8 @@ public class MainTest {
             MainTest.insertIndex("peer"+i, "test.xml", dbMan);
             dbMan.closeConnection();
         }*/
+        
+        
                 
     }
 

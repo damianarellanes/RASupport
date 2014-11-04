@@ -134,7 +134,7 @@ public class UpdatingBenchmark {
         
         DataSetPlot s3 = new DataSetPlot(optimal);
         s3.setPlotStyle(plotStyle);
-        s3.setTitle("Algoritmo con patrones pre-compilados (con programación dinámic)");
+        s3.setTitle("Algoritmo con patrones pre-compilados (con programación dinámica)");
                         
         p.addPlot(s1);
         p.addPlot(s2);
