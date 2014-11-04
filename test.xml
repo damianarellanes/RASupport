@@ -1,0 +1,29 @@
+<rs_initial>
+	<use>
+		<availability_start>00:00</availability_start>
+		<availability_end>16:32</availability_end>
+		<cpu_utilization>15</cpu_utilization>
+		<only_for_friends>peer3,peer1</only_for_friends>
+	</use>
+	<processing>
+		<free_mem>5957.51</free_mem>
+		<busy_cpu>79.09</busy_cpu>
+		<os_name>HP UX</os_name>
+		<cpu_speed>2919.1</cpu_speed>
+		<cores>1</cores>
+	</processing>
+	<storage>
+		<free_hdisk>191039.39</free_hdisk>
+		<total_hdisk>597866.02</total_hdisk>
+	</storage>
+	<display>
+		<bit_depth>1</bit_depth>
+		<screen_width>501</screen_width>
+		<refresh_rate>386</refresh_rate>
+		<screen_height>387</screen_height>
+	</display>
+	<network>
+		<latency>194.67</latency>
+		<bandwidth>862.87</bandwidth>
+	</network>
+</rs_initial>

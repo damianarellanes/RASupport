@@ -1,0 +1,29 @@
+<rs_initial>
+	<use>
+		<availability_start>00:00</availability_start>
+		<availability_end>16:32</availability_end>
+		<max_cpu_utilization>15</max_cpu_utilization>
+		<only_for_friends>peer3,peer1</only_for_friends>
+	</use>
+	<processing>
+		<free_mem>15855.58</free_mem>
+		<busy_cpu>31.96</busy_cpu>
+		<os_name>Linux</os_name>
+		<cpu_speed>3963.54</cpu_speed>
+		<cores>5</cores>
+	</processing>
+	<storage>
+		<free_hdisk>85024.1</free_hdisk>
+		<total_hdisk>442877.28</total_hdisk>
+	</storage>
+	<display>
+		<bit_depth>6</bit_depth>
+		<refresh_rate>641</refresh_rate>
+		<screen_height>721</screen_height>
+		<screen_width>408</screen_width>
+	</display>
+	<network>
+		<bandwidth>420.76</bandwidth>
+		<latency>189.77</latency>
+	</network>
+</rs_initial>
