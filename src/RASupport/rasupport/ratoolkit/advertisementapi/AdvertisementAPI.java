@@ -1,6 +1,6 @@
 package RASupport.rasupport.ratoolkit.advertisementapi;
 
-import RASupport.myconet.MycoNode;
+import myconet.MycoNode;
 import RASupport.rasupport.rasupportconfig.common.RASupportNode;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logMessage;

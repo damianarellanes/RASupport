@@ -3,7 +3,7 @@ package RASupport.rasupport.ratoolkit.advertisementapi.agents;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import RASupport.myconet.MycoNode;
+import myconet.MycoNode;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportDynamicAttributes;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportStaticAttributes;
 import RASupport.rasupport.rasupportconfig.xml.TagsConfiguration;

@@ -17,7 +17,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import RASupport.myconet.MycoNode;
+import myconet.MycoNode;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;

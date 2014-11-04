@@ -1,7 +1,7 @@
 package RASupport.rasupport.ratoolkit.common;
 
 import java.io.File;
-import RASupport.myconet.MycoNode;
+import myconet.MycoNode;
 
 /**
  * RAToolkit: parent of advertisement APIs (facades)

@@ -1,6 +1,6 @@
 package RASupport.rasupport.rasupportmain;
 
-import RASupport.myconet.MycoNode;
+import myconet.MycoNode;
 
 /**
  *

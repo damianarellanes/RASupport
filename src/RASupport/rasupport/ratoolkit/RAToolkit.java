@@ -1,6 +1,6 @@
 package RASupport.rasupport.ratoolkit;
 
-import RASupport.myconet.MycoNode;
+import myconet.MycoNode;
 import RASupport.rasupport.ratoolkit.apismanagement.APIFactory;
 import static RASupport.rasupport.ratoolkit.common.Common.AdvertisementAPIS.*;
 import static RASupport.rasupport.ratoolkit.common.Common.DatabaseManagers.*;

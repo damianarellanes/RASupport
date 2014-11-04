@@ -1,6 +1,6 @@
 package RASupport.rasupport.ratoolkit.advertisementapi.agents;
 
-import RASupport.myconet.MycoNode;
+import myconet.MycoNode;
 import RASupport.rasupport.ratoolkit.advertisementapi.rs.RSpec;
 import static RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages.CREATE_RS;
 import RASupport.rasupport.ratoolkit.transportlayer.RAToolkitSender;

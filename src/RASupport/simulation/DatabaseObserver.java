@@ -2,9 +2,9 @@ package RASupport.simulation;
 
 import java.io.IOException;
 import static java.lang.System.exit;
-import RASupport.myconet.MycoCast;
-import RASupport.myconet.MycoList;
-import RASupport.myconet.MycoNode;
+import myconet.MycoCast;
+import myconet.MycoList;
+import myconet.MycoNode;
 import peersim.config.Configuration;
 import peersim.core.Control;
 import peersim.core.Network;

@@ -1,6 +1,6 @@
 package RASupport.rasupport.ratoolkit.common;
 
-import RASupport.myconet.MycoNode;
+import myconet.MycoNode;
 
 /**
  * RAToolkit: representation of an agent in the toolkit
