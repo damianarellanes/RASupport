@@ -1,11 +1,10 @@
 package RASupport.rasupport.ratoolkit.advertisementapi.agents;
 
-import RASupport.rasupport.ratoolkit.advertisementapi.rs.RSpec;
+import RASupport.rasupport.ratoolkit.common.Agent;
 import RASupport.rasupport.ratoolkit.common.AgentsFactory;
 import RASupport.rasupport.ratoolkit.common.Common.Agents;
 import static RASupport.rasupport.ratoolkit.common.Common.Agents.*;
-import static RASupport.rasupport.ratoolkit.common.ErrorsManager.*;
-import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
+import static RASupport.rasupport.ratoolkit.common.ErrorsManager.UNKNOWN_AGENT;
 
 /**
  *
@@ -14,19 +13,20 @@ import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
 public class AdvertisementAgentsFactory implements AgentsFactory {
 
     @Override
-    public AdvertisementAgent create(Agents type, Object...params) {
+    public Agent create(Agents type, Object...params) {
         
-        if(type == AGENT_ADVERTISEMENT_INITIAL) {
-            return new AdvertisementAgentInitial((RSpec) params[0],
-            (String) params[1], (DatabaseManager) params[2]);
+        if(type == AGENT_ADVERTISEMENT_INITIAL) {            
+            return new AdvertisementAgentInitial((String) params[0],            
+                (String) params[1]);
         }
         else if(type == AGENT_ADVERTISEMENT_UPDATING) {
-            return new AdvertisementAgentUpdating((RSpec) params[0], 
-                    (String) params[1], (DatabaseManager) params[2]);
+            return new AdvertisementAgentUpdating((String) params[0], 
+                    (String) params[1], (String) params[2]);
         }
         else{
-            return AGENT_ADVERTISEMENT_UNKNOWN;
-        }        
+            return UNKNOWN_AGENT;
+        }
+        
     }
 
 }

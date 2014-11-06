@@ -205,7 +205,7 @@ public class SQLiteManager  implements DatabaseManager {
         
         // We have the restriction On delete Cascade On update Cascade
         // We don't have to delete the own index
-        executeSentence("DELETE FROM Peers WHERE namePeer != " + aliasPeerOwner);       
+        executeSentence("DELETE FROM Peers WHERE namePeer != '" + aliasPeerOwner + "'");       
     }
     
     @Override
@@ -226,7 +226,7 @@ public class SQLiteManager  implements DatabaseManager {
             stmt.close();
             //connection.close();
         } catch (SQLException ex) {            
-            logError(ex);
+            logError(aliasPeerOwner + ":" + ex);
         }
     }    
     

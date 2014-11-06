@@ -1,6 +1,7 @@
 package RASupport.rasupport.ratoolkit.common;
 
-import java.io.File;
+import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgentInitial;
+import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgentUpdating;
 import myconet.MycoNode;
 
 /**
@@ -11,11 +12,12 @@ public interface RAToolkitAdvertisementAPI extends RAToolkitAPI {
     
     public void advertiseRSTo(MycoNode superpeer);
     
-    public void receiveRS(File rsFile, String aliasSender);
+    //public void receiveRS(File rsFile, String aliasSender);
+    public void receiveInitialAgent(AdvertisementAgentInitial agent);
     
-    public void advertiseUpdatingTo(String attribute, String newValue);
+    public void advertiseUpdating(String attribute, String newValue);
     
-    public void receiveUpdating(String attribute, String newValue, 
-            String aliasSender);
+    //public void receiveUpdating(String attribute, String newValue, String aliasSender);
+    public void receiveUpdatingAgent(AdvertisementAgentUpdating agent);
 
 }

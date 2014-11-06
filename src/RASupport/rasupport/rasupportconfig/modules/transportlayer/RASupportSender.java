@@ -10,6 +10,8 @@ import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
  */
 public interface RASupportSender {
     
+    public void sendObject(Object object, RASupportTopologyNode sender, RASupportTopologyNode receiver);
+    
     public void sendXML(File rsFile, RASupportTopologyNode sender, RASupportTopologyNode receiver);
 
     public void sendMessage(String message, RASupportTopologyNode sender, RASupportTopologyNode receiver);

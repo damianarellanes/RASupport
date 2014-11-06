@@ -1,7 +1,5 @@
 package RASupport.rasupport.ratoolkit.common;
 
-import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgent;
-
 /**
  * RAToolkit: errors management in the RATollkit
  * @author Damian Arellanes
@@ -9,5 +7,5 @@ import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgent;
 public class ErrorsManager {
 
     // Agents
-    public static final AdvertisementAgent AGENT_ADVERTISEMENT_UNKNOWN = null;
+    public static final Agent UNKNOWN_AGENT = null;
 }

@@ -3,6 +3,8 @@ package RASupport.rasupport.ratoolkit.transportlayer;
 import java.io.File;
 import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportActions;
 import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportReceiver;
+import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgentInitial;
+import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgentUpdating;
 import RASupport.rasupport.ratoolkit.common.RAToolkitAdvertisementAPI;
 import static RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages.*;
 
@@ -16,6 +18,21 @@ public class RAToolkitReceiver implements RASupportReceiver {
     
     public RAToolkitReceiver(RAToolkitAdvertisementAPI adv) {
         this.advertisementAPI = adv;
+    }
+    
+    @Override
+    public void receiveObject(Object receivedObject, RASupportActions action) {
+        
+        if(action.equals(CREATE_RS)) {
+            advertisementAPI.receiveInitialAgent(
+                    (AdvertisementAgentInitial) receivedObject
+            );
+        }
+        else if(action.equals(UPDATE_ATTRIBUTE)) {
+            advertisementAPI.receiveUpdatingAgent(
+                    (AdvertisementAgentUpdating) receivedObject
+            );
+        }
     }
 
     @Override
@@ -32,7 +49,7 @@ public class RAToolkitReceiver implements RASupportReceiver {
     public void simulateReceiveXML(File rsFile, String aliasSender, RASupportActions action) {
        
         if(action.equals(CREATE_RS)) {
-            advertisementAPI.receiveRS(rsFile, aliasSender);
+            //advertisementAPI.receiveRS(rsFile, aliasSender);
         }
     }
 
@@ -44,7 +61,7 @@ public class RAToolkitReceiver implements RASupportReceiver {
     public void simulateReceiveMessages(String aliasSender, RASupportActions action, String...messages) {
         
         if(action.equals(UPDATE_ATTRIBUTE)) {
-            advertisementAPI.receiveUpdating(messages[0], messages[1], aliasSender);
+            //advertisementAPI.receiveUpdating(messages[0], messages[1], aliasSender);
         }
     }
 

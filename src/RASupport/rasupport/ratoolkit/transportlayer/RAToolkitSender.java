@@ -11,6 +11,14 @@ import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportActio
  */
 public class RAToolkitSender {
     
+    // Sends an object/agent over the network
+    public static void sendObject(Object object, RASupportTopologyNode receiver,
+            RASupportActions action) {
+        
+        receiver.getRASupport().getReceiver().receiveObject(object, action);
+        
+    }
+    
     // Sends a xml message (from xmlPath) from sender to receiver.
     // The receiver performs the specified action
     public static void sendXML(File xmlPath, RASupportTopologyNode sender, RASupportTopologyNode receiver, 

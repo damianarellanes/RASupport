@@ -30,8 +30,8 @@ public class RSimMonitor implements RASupportResourceMonitor {
     
     // The monitor selects a value within the range to update a random dynamic attribute
     // Monitor waits between 2 and 10 ms (default configuration)
-    private int MIN_UPDATING = 2;
-    private int MAX_UPDATING = 10;
+    private int MIN_UPDATING = 1;
+    private int MAX_UPDATING = 2;
 
     public RSimMonitor(RASupportNode n, RASupportResourceAggregation resourceAggregation) {
         

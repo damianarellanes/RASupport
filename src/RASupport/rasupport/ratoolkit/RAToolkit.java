@@ -77,6 +77,6 @@ public class RAToolkit implements RASupportResourceAggregation {
 
     @Override
     public void updateDynamicResource(String attribute, String newValue) {
-        advertisementAPI.advertiseUpdatingTo(attribute, newValue);        
+        advertisementAPI.advertiseUpdating(attribute, newValue);        
     }
 }

@@ -9,9 +9,8 @@ import java.io.File;
  */
 public interface RASupportReceiver {
     
-    // Protocols to receive a XML Message
-    // For our simulations, we don't have to use the network, we are going to pass a reference to the RS (XML document)
-    // Therefore, we are using the second one
+    // For any scenario
+    public void receiveObject(Object receivedObject, RASupportActions action);
     
     // For real scenarios    
     public void receiveXML();

@@ -1,16 +1,14 @@
 package RASupport.rasupport.ratoolkit.advertisementapi;
 
-import myconet.MycoNode;
 import RASupport.rasupport.rasupportconfig.common.RASupportNode;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logMessage;
-import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
 import RASupport.rasupport.ratoolkit.advertisementapi.agents.*;
 import RASupport.rasupport.ratoolkit.advertisementapi.rs.RSpec;
-import static RASupport.rasupport.ratoolkit.common.Common.Agents.*;
 import RASupport.rasupport.ratoolkit.common.RAToolkitAdvertisementAPI;
 import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
-import java.io.File;
+import myconet.MycoNode;
+import simulation.AdvertisementObserver;// Only for experiments
+import simulation.NetworkObserver;
 
 /**
  * RAToolkit: facade of the resource advertisement API
@@ -21,11 +19,8 @@ public class AdvertisementAPI implements RAToolkitAdvertisementAPI {
     private DatabaseManager databaseManager = null;    
     private RSpec rspec = null;
     
-    // Keeping only a reference two both advertisement agents, in order to send copies 
-    // and do not create an object for each advertisement agent sending
-    private AdvertisementAgentsFactory agentsFactory = null;
-    private AdvertisementAgentInitial initialAgent = null;    
-    private AdvertisementAgentUpdating updatingAgent = null;    
+    private InitialManager initialAgentsManager = null;
+    private UpdatingManager updatingManager = null;
     
     private RASupportNode node = null;
     private MycoNode myconetPeer = null;
@@ -46,17 +41,16 @@ public class AdvertisementAPI implements RAToolkitAdvertisementAPI {
         rspec = new RSpec(myconetPeer.getAlias(), node.getUseRestrictions(), 
                 node.getDynamicAttributes(), node.getStaticAttributes());
         
-        // Creates advertisement agents
-        agentsFactory = new AdvertisementAgentsFactory();
+        // Create the factory of advertisement agents
+        AdvertisementAgentsFactory factory = new AdvertisementAgentsFactory();
         
-        initialAgent = (AdvertisementAgentInitial) 
-                agentsFactory.create(AGENT_ADVERTISEMENT_INITIAL, rspec, 
-                        this.myconetAlias, this.databaseManager);
+        // Creates advertisment agents managers
+        updatingManager = new UpdatingManager(rspec, 
+                this.myconetPeer, this.databaseManager, factory);
         
-        updatingAgent = (AdvertisementAgentUpdating) 
-                agentsFactory.create(AGENT_ADVERTISEMENT_UPDATING, rspec, 
-                        this.myconetAlias, this.databaseManager);
-        
+        initialAgentsManager = new InitialManager(rspec, 
+                        this.myconetAlias, this.databaseManager, factory);
+                
         // Inserts the own lindex in the database (peer and RS)
         insertOwnIndex();
                 
@@ -64,62 +58,46 @@ public class AdvertisementAPI implements RAToolkitAdvertisementAPI {
     
     private void insertOwnIndex() {
         databaseManager.insertPeer(myconetAlias);
-        initialAgent.computeRS(rspec.get().getAbsolutePath(), myconetAlias);
+        initialAgentsManager.computeRS(rspec.get().getAbsolutePath(), myconetAlias);
     }
 
     @Override
     public void advertiseRSTo(MycoNode superpeer) {       
        
-        if(superpeer != null) {
-            initialAgent.send(myconetPeer, superpeer);
-        }        
-        else {
-            logError("impossible to advertise resources from normal peer " + myconetPeer.getID() + " because it is not connected to a super-peer");
-        }
+        initialAgentsManager.sendInitialAgent(superpeer);                
     }
 
     @Override
-    public void advertiseUpdatingTo(String attribute, String newValue) {
+    public void advertiseUpdating(String attribute, String newValue) {
         
-        // The updating agent updates the RS common between advertisement agents
-        // The agent updates the own database and the own RS (only resources block)
-        updatingAgent.updateRS(attribute, newValue);
-        
-        // Sends the updating agent only if a super-peer available exists
-        RASupportTopologyNode sp = myconetPeer.getSuperpeer();
-        if(sp != null) { 
-            
-            // Sends an updating advertisement agent to the corresponding super-peer
-            //logMessage("NORMAL-PEER " + myconetPeer + " updates " + attribute + "=" + newValue + " in " + sp);
-            updatingAgent.send(myconetPeer, (MycoNode) sp, attribute, newValue);
-        }
-        
+        updatingManager.sendUpdatingAgent(attribute, newValue);                
     }
     
     @Override
-    public void receiveUpdating(String attribute, String newValue, String aliasSender) {
+    public void receiveUpdatingAgent(AdvertisementAgentUpdating updatingAgent) {     
         
         logMessage("SUPER-PEER " + myconetAlias + " has received an UPDATING AGENT from " +
-                aliasSender + ": " + attribute + "=" + newValue);
-        databaseManager.updateAttribute(attribute, newValue, aliasSender);
+                updatingAgent.getSender() + ": " + 
+                updatingAgent.getAttributeUpdating() + "=" + updatingAgent.getNewValueUpdating());
+        
+        // Only for experiments
+        AdvertisementObserver.incUpdatingAgentsCount();
+        NetworkObserver.incUpdatingAgentsCount();
+        
+        updatingAgent.behaveInSP(databaseManager);
     }
 
     @Override
-    public void receiveRS(File rsFile, String aliasSender) {
-        
-        /*if(mycoNode.isBiomass()) {
-            return;
-        }*/
+    public void receiveInitialAgent(AdvertisementAgentInitial initialAgent) {
         
         logMessage("SUPER-PEER " + myconetPeer + 
-                " has received a INITIAL AGENT from " + aliasSender);
+                " has received a INITIAL AGENT from " + initialAgent.getSender());
         
-        // Inserts the sender peer into the database        
-        databaseManager.insertPeer(aliasSender);
-        
-        // Parses the RS and inserts the attributes, and use restrictions        
-        initialAgent.computeRS(rsFile.getAbsolutePath(), aliasSender);        
-
-    }       
+        // Only for experiments
+        AdvertisementObserver.incInitialAgentsCount();
+        NetworkObserver.incInitialAgentsCount();
+                
+        initialAgent.behaveInSP(databaseManager, initialAgentsManager);
+    }
     
 }

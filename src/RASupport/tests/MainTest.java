@@ -36,7 +36,45 @@ import RASupport.rasupport.ratoolkit.databasesmanagement.sqlite.SQLiteManager;
  *
  * @author damianarellanes
  */
-public class MainTest {
+public class MainTest implements 
+        Runnable {
+    
+    public Thread t;
+    private boolean stop;
+    private String name = "";
+
+    public MainTest(String n) {
+        this.name = n;        
+        stop = false;
+    }
+
+    public void start ()
+    {
+       System.out.println("Starting " +  name );
+       if (t == null)
+       {
+          t = new Thread (this, name);
+          t.start ();
+       }
+    }
+
+    public void stopThread() {
+        this.stop = true;       
+        t = null;
+    }
+
+    @Override
+    public void run() {
+        while(!stop) {
+            
+        }
+        System.out.println("Thread " + name + " stopped!");
+    }
+
+    @Override
+    public void finalize() {
+        System.out.println("Thread " + name + " KILLED!");
+    }
 
     public static void insertIndex(String peerAlias, String rsPath, DatabaseManager dbMan) {
 
@@ -163,7 +201,7 @@ public class MainTest {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException, InterruptedException {
         //RASupport support = new RASupportMain(new MycoNode(""));        
 
         //&new SQLiteManager(10);
@@ -175,7 +213,22 @@ public class MainTest {
             dbMan.closeConnection();
         }*/
         
+        MainTest t1 = new MainTest("1");
+        t1.start();
+        /*MainTest t2 = new MainTest("2");
+        MainTest t3 = new MainTest("3");*/
         
+        //Thread.sleep(1000);
+        
+        t1.stopThread();
+        t1 = null;
+        Thread.sleep(60000);
+        
+        /*t2.stopThread();
+        t3.stopThread();
+        */
+        //Runtime.runFinalizersOnExit(true);
+        System.gc();
                 
     }
 

@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportDynamicAttributes;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportStaticAttributes;
+import com.panayotis.gnuplot.style.FillStyle;
 
 /**
  *
@@ -117,23 +118,38 @@ public class UpdatingBenchmark {
         //p.setTitle("Rendimiento del algoritmo de actualización de recursos dinámicos"); 
         p.set("xlabel", "'Número de actualizaciones'");
         p.set("ylabel", "'Tiempo (ms)'");
+        //p.set("xrange", "[0:10]");
+        //p.set("mxtics", "2"); // To divide x range between 2
         p.setKey(JavaPlot.Key.TOP_RIGHT);
         
         PlotStyle plotStyle = new PlotStyle();        
-        plotStyle.setStyle(Style.LINES);
-        plotStyle.setPointType(5);
-        plotStyle.setPointSize(8);
+        plotStyle.setStyle(Style.LINESPOINTS);        
+        /*plotStyle.setStyle(Style.HISTOGRAMS);        
+        plotStyle.setFill(new FillStyle(FillStyle.Fill.SOLID));*/
+        plotStyle.setLineWidth(1);
+        plotStyle.setPointType(4);
+        plotStyle.setPointSize(1);
+        
+        PlotStyle plotStyle2 = new PlotStyle();        
+        plotStyle2.setStyle(Style.LINESPOINTS);
+        plotStyle2.setPointType(9);
+        plotStyle2.setPointSize(1);
+        
+        PlotStyle plotStyle3 = new PlotStyle();        
+        plotStyle3.setStyle(Style.LINESPOINTS);
+        plotStyle3.setPointType(15);
+        plotStyle3.setPointSize(1);
         
         DataSetPlot s1 = new DataSetPlot(nonOptimal);
         s1.setPlotStyle(plotStyle);
         s1.setTitle("Algoritmo con patrones no pre-compilados");
         
         DataSetPlot s2 = new DataSetPlot(nonOptimal2);
-        s2.setPlotStyle(plotStyle);
+        s2.setPlotStyle(plotStyle2);
         s2.setTitle("Algoritmo con patrones pre-compilados (sin programación dinámica)");
         
         DataSetPlot s3 = new DataSetPlot(optimal);
-        s3.setPlotStyle(plotStyle);
+        s3.setPlotStyle(plotStyle3);
         s3.setTitle("Algoritmo con patrones pre-compilados (con programación dinámica)");
                         
         p.addPlot(s1);
