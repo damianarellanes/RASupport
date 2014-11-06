@@ -9,7 +9,7 @@ config.basename example-test
 # Number of peers in the network
 network.size 100
 # Length of simulation
-simulation.cycles 150
+simulation.cycles 50
 #simulation.nodefaultcycle
 
 # Only set a random seed if you want a reproducible scenario
@@ -194,19 +194,19 @@ protocol.chem.period 1
 ####################################################################
 # Churn Scenario
 ####################################################################
-#control.dnet Nodulator
-#control.dnet.add -0.10
-#control.dnet.minsize 0
-#control.dnet.maxsize 100000
-#control.dnet.from 1
-#control.dnet.to	simulation.cycles + 1
-#control.dnet.type all
-#control.dnet.substitute false
-#control.dnet.period 1
-#control.dnet.poisson false
-#control.dnet.init.state myconet.StateInitializer
-#control.dnet.init.state.initial_state BIOMASS
-#control.dnet.init.clean myconet.HyphaDataCleanerInitializer
+control.dnet Nodulator
+control.dnet.add -0.10
+control.dnet.minsize 0
+control.dnet.maxsize 100000
+control.dnet.from 1
+control.dnet.to	simulation.cycles + 1
+control.dnet.type all
+control.dnet.substitute false
+control.dnet.period 1
+control.dnet.poisson false
+control.dnet.init.state myconet.StateInitializer
+control.dnet.init.state.initial_state BIOMASS
+control.dnet.init.clean myconet.HyphaDataCleanerInitializer
 
 
 ####################################################################
@@ -390,7 +390,7 @@ control.disconnect.parent_strategy myconet.NullParentStrategy
 control.protocols peersim.cdsim.FullNextCycle
 
 #order.control lo state jg to jc gen protocols oo jv
-order.control exp lo state jg to protocols oo jv
+order.control cyc lo state jg to protocols oo jv
 
 #order.control lo state jg to jc co gen msg uo oo ro
 #order.control shf dnet dnet2 disconnect protocols lo state jg oo degree
@@ -399,34 +399,37 @@ order.control exp lo state jg to protocols oo jv
 order.protocol fail dat lnk fng chem
 #order.protocol fail dat lnk fng load chem
 
-# Control for experiments on RAToolkit
-control.exp simulation.AdvertisementObserver
-control.exp.protocol myc
-control.exp.cycles simulation.cycles
-control.exp.FINAL
 
 ####################################################################
 # Control for experiments on RAToolkit
 ####################################################################
-control.nsize NetworkObserver
-control.nsize.jump 10
-control.nsize.maxsize 0
-control.nsize.maxcycle 50
-control.nsize.totalcycles simulation.cycles
 
-control.nsize.add -0.0
-control.nsize.minsize 0
-control.nsize.maxsize 100000
-control.nsize.from 1
-control.nsize.to simulation.cycles + 1
-control.nsize.type all
-control.nsize.substitute false
-control.nsize.period 1
-control.nsize.poisson false
-control.nsize.init.state myconet.StateInitializer
-control.nsize.init.state.initial_state BIOMASS
-control.nsize.init.clean myconet.HyphaDataCleanerInitializer
-control.nsize.FINAL
+### Control for variate the network size
+#control.nsize NetworkObserver
+#control.nsize.jump 50
+#control.nsize.maxsize 0
+#control.nsize.maxcycle 100
+#control.nsize.totalcycles simulation.cycles
+#control.nsize.add -0.0
+#control.nsize.minsize 0
+#control.nsize.maxsize 100000
+#control.nsize.from 1
+#control.nsize.to simulation.cycles + 1
+#control.nsize.type all
+#control.nsize.substitute false
+#control.nsize.period 1
+#control.nsize.poisson false
+#control.nsize.init.state myconet.StateInitializer
+#control.nsize.init.state.initial_state BIOMASS
+#control.nsize.init.clean myconet.HyphaDataCleanerInitializer
+#control.nsize.FINAL
+
+### Control to variate cycles
+control.cyc simulation.CyclesObserver
+#control.cyc.protocol myc
+#control.cyc.cycles simulation.cycles
+#control.cyc.fileresults cycles5.dat
+#control.cyc.FINAL
 
 # Control to test rows in Peers table, such a rows have to correspond with super-peers and its normal peers
 # Control to test the advertisement phase

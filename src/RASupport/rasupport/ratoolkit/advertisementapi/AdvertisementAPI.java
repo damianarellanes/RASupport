@@ -7,7 +7,7 @@ import RASupport.rasupport.ratoolkit.advertisementapi.rs.RSpec;
 import RASupport.rasupport.ratoolkit.common.RAToolkitAdvertisementAPI;
 import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
 import myconet.MycoNode;
-import simulation.AdvertisementObserver;// Only for experiments
+import simulation.CyclesObserver;// Only for experiments
 import simulation.NetworkObserver;
 
 /**
@@ -81,7 +81,7 @@ public class AdvertisementAPI implements RAToolkitAdvertisementAPI {
                 updatingAgent.getAttributeUpdating() + "=" + updatingAgent.getNewValueUpdating());
         
         // Only for experiments
-        AdvertisementObserver.incUpdatingAgentsCount();
+        CyclesObserver.incUpdatingAgentsCount();
         NetworkObserver.incUpdatingAgentsCount();
         
         updatingAgent.behaveInSP(databaseManager);
@@ -94,7 +94,7 @@ public class AdvertisementAPI implements RAToolkitAdvertisementAPI {
                 " has received a INITIAL AGENT from " + initialAgent.getSender());
         
         // Only for experiments
-        AdvertisementObserver.incInitialAgentsCount();
+        CyclesObserver.incInitialAgentsCount();
         NetworkObserver.incInitialAgentsCount();
                 
         initialAgent.behaveInSP(databaseManager, initialAgentsManager);

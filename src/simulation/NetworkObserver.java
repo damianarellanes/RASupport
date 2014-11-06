@@ -89,8 +89,8 @@ public class NetworkObserver extends DynamicNetwork {
     
     // Initializes variables to count advertisement agents
     initialAgents = updatingAgents = 0;
-    pointsInitial = new int[totalCycles/maxcycle][];
-    pointsUpdating = new int[totalCycles/maxcycle][];
+    //pointsInitial = new int[(totalCycles/maxcycle)-1][];
+    //pointsUpdating = new int[(totalCycles/maxcycle)-1][];
   }
   
     public synchronized static void incInitialAgentsCount() {
@@ -103,32 +103,47 @@ public class NetworkObserver extends DynamicNetwork {
     
     private void plot(int currentCycle) {
         if(currentCycle == totalCycles-1) { 
-        System.err.println("SIMULATION FINISHED!");
+            
+            System.out.println("RESULT:" + "\t\t" + initialAgents + "\t\t" + updatingAgents);
+            /*for(int i = 0; i < networkSizeCounter; i++) {
+                
+                int ns = pointsInitial[i][0];
+                System.out.println(ns + "\t\t" + pointsInitial[i][1] + "\t\t" + pointsUpdating[i][1]);
+                
+            }*/
+            
+            /*System.err.println("SIMULATION FINISHED!");
 
-        JavaPlot p = new JavaPlot();                                        
-        p.set("xlabel", "'Tamaño de la red'");
-        p.set("ylabel", "'Número de agentes de anunciamiento'");
-        p.setKey(JavaPlot.Key.TOP_RIGHT);
-        p.set("mxtics", "10");
-        p.set("mytics", "10");
+            JavaPlot p = new JavaPlot();                                        
+            p.set("xlabel", "'Tamaño de la red'");
+            p.set("ylabel", "'Número de agentes de anunciamiento'");
+            p.setKey(JavaPlot.Key.TOP_LEFT);
+            //p.set("mxtics", "100");
+            //p.set("mytics", "100");
+ 
+           PlotStyle plotStyle = new PlotStyle();        
+            //plotStyle.setStyle(Style.LINES);
+            plotStyle.setStyle(Style.LINESPOINTS);
+            plotStyle.setPointType(4);
+            plotStyle.setPointSize(1);
 
-        PlotStyle plotStyle = new PlotStyle();        
-        //plotStyle.setStyle(Style.LINES);
-        plotStyle.setStyle(Style.LINESPOINTS);
-        plotStyle.setPointType(4);
-        plotStyle.setPointSize(1);
+            PlotStyle plotStyle2 = new PlotStyle();        
+            //plotStyle.setStyle(Style.LINES);
+            plotStyle2.setStyle(Style.LINESPOINTS);
+            plotStyle2.setPointType(9);
+            plotStyle2.setPointSize(1);
 
-        DataSetPlot s1 = new DataSetPlot(pointsInitial);
-        s1.setPlotStyle(plotStyle);
-        s1.setTitle("Agentes de anunciamiento inicial");
+            DataSetPlot s1 = new DataSetPlot(pointsInitial);
+            s1.setPlotStyle(plotStyle);
+            s1.setTitle("Agentes de anunciamiento inicial");
 
-        DataSetPlot s2 = new DataSetPlot(pointsUpdating);
-        s2.setPlotStyle(plotStyle);
-        s2.setTitle("Agentes de anunciamiento de actualización");
+            DataSetPlot s2 = new DataSetPlot(pointsUpdating);
+            s2.setPlotStyle(plotStyle2);
+            s2.setTitle("Agentes de anunciamiento de actualización");
 
-        p.addPlot(s1);            
-        p.addPlot(s2);
-        p.plot();
+            p.addPlot(s1);            
+            p.addPlot(s2);
+            p.plot();*/
         }
     }
 
@@ -137,7 +152,7 @@ public class NetworkObserver extends DynamicNetwork {
     int currentCycle = CDState.getCycle();
           
      
-    if ((currentCycle % maxcycle) == 0 || (currentCycle == totalCycles -1)) {
+    if (currentCycle % maxcycle == 0) {
         
         System.err.println("INITIAL Plot(network, agents)=" + currentSize + "," + initialAgents);
         System.err.println("UPDATING Plot(network, agents)=" + currentSize + "," + updatingAgents);

@@ -120,7 +120,7 @@ public class UpdatingBenchmark {
         p.set("ylabel", "'Tiempo (ms)'");
         //p.set("xrange", "[0:10]");
         //p.set("mxtics", "2"); // To divide x range between 2
-        p.setKey(JavaPlot.Key.TOP_RIGHT);
+        p.setKey(JavaPlot.Key.TOP_LEFT);
         
         PlotStyle plotStyle = new PlotStyle();        
         plotStyle.setStyle(Style.LINESPOINTS);        
