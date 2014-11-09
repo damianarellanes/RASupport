@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<query>
+	<option>requires:find_resources</option>
+	<ttl>4</ttl>
+	<group>
+		<name>Processing</name>
+		<num_nodes>8</num_nodes>
+		<cpu_speed>1024.0,2500.0,4096.0,4096.0,0.2</cpu_speed>
+		<free_mem>512.0,1024.0,4096.0,8192.0,0.05</free_mem>
+		<free_hdisk>50.0,60.5,92.5,100.0,0.05</free_hdisk>
+		<cores>1,2,4,4,0.03</cores>
+		<busy_cpu>0.0,0.0,30.0,75.0,0.05</busy_cpu>
+		<os_name>0.0,0.0</os_name>
+		<rest_betw_nodes>
+			<latency>10.199999809265137,22.100000381469727,30.0,50.0,0.02</latency>
+			<bandwidth>10.199999809265137,22.100000381469727,30.0,50.0,0.02</bandwidth>
+		</rest_betw_nodes>
+	</group>
+	<group>
+		<name>Display</name>
+		<num_nodes>1</num_nodes>
+		<screen_height>600,1024,2048,1700,0.02</screen_height>
+		<refresh_rate>40,60,120,120,0.05</refresh_rate>
+		<bit_depth>8,16,48,48,0.0</bit_depth>
+		<screen_width>800,1024,1366,2560,0.02</screen_width>
+	</group>
+	<rest_betw_groups>
+		<group_names>Processing,Display</group_names>
+		<latency>0.0,0.0,50.0,100.0,0.2</latency>
+	</rest_betw_groups>
+</query>

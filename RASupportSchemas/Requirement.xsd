@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	elementFormDefault="qualified">
+
+	<!--String attribute = allowed_val(string),penalty(float)-->
+	<!--The allowed value must be any string (even with commas)-->
+	<xs:simpleType name="stringAttribute">
+		<xs:restriction base="xs:string">
+			<xs:pattern value=".*,\d+(\.\d+)" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!--Int attribute = min_val(int),min_ideal(int),max_ideal(int),max_val(int),penalty(float)-->
+	<xs:simpleType name="intAttribute">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d+,\d+,\d+,\d+,\d+(\.\d+)" />
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<!--Float attribute = min_val(float),min_ideal(float),max_ideal(float),max_val(float),penalty(float)-->
+	<xs:simpleType name="floatAttribute">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d+(\.\d+),\d+(\.\d+),\d+(\.\d+),\d+(\.\d+),\d+(\.\d+)" />
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

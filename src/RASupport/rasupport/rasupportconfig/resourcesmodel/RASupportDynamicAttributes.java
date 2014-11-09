@@ -1,10 +1,12 @@
 package RASupport.rasupport.rasupportconfig.resourcesmodel;
 
-import java.util.List;
 import RASupport.rasupport.rasupportconfig.common.RASupportCommon;
-import RASupport.rasupport.rasupportconfig.common.RASupportCommon.*;
+import RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeCategories;
+import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeCategories.*;
+import RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeTypes;
 import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeTypes.*;
 import static RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportResources.*;
+import java.util.List;
 
 /**
  * RASupportConfig: allowed dynamic attributes in the support
@@ -73,4 +75,27 @@ public enum RASupportDynamicAttributes implements RASupportAttributesInterface {
     public Number getAllowedMaxValue() { return allowedMaxValue; }
     @Override
     public List<String> getAllowedValues() { return allowedValues; }
+
+    @Override
+    public boolean isNumerical() {
+        return (type.equals(FLOAT_ATTRIBUTE) || type.equals(INT_ATTRIBUTE));
+    }
+    @Override
+    public boolean isString() {
+        return type.equals(STRING_ATTRIBUTE);
+    }
+    @Override
+    public AttributeCategories getCategory() {
+        return DYNAMIC_ATTRIBUTE;
+    }
+    
+    @Override
+    public boolean isFloat() {
+        return type.equals(FLOAT_ATTRIBUTE);
+    }
+
+    @Override
+    public boolean isInteger() {
+        return type.equals(INT_ATTRIBUTE);
+    }
 }

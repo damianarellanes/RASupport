@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	elementFormDefault="qualified">
+
+	<xs:include schemaLocation="Requirement.xsd" />
+	<xs:include schemaLocation="Attributes.xsd" />
+
+	<xs:complexType name="group">
+		<xs:all> 
+			<!--<xs:element name="name" type="xs:string"/>-->
+			<!--Group names can only have any string without commas-->
+			<xs:element name="name">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[^,]+" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		
+			<!--Requires a number of nodes in the range [0,unbounded]-->
+			<xs:element name="num_nodes" type="xs:nonNegativeInteger"/>
+						
+			<!--<xs:sequence>			
+				<xs:choice>												
+					<xs:element name="busy_cpu" type="floatAttribute" />				
+				</xs:choice>
+			</xs:sequence>-->
+			<!--<xs:choice minOccurs="1" maxOccurs="unbounded">				
+				
+				<xs:sequence maxOccurs="unbounded">
+					<xs:any processContents="lax" />
+				</xs:sequence>
+			</xs:choice>-->
+			
+			
+			<!--Here we can add support for more attributes-->			
+			<xs:element name="free_mem" type="floatAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="busy_cpu" type="floatAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="free_hdisk" type="floatAttribute" minOccurs="0" maxOccurs="1" />						
+			<xs:element name="bandwidth" type="floatAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="latency" type="floatAttribute" minOccurs="0" maxOccurs="1" />
+			
+			<xs:element name="cpu_speed" type="floatAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="cores" type="intAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="os_name" type="stringAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="total_hdisk" type="intAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="screen_width" type="intAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="screen_height" type="intAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="bit_depth" type="intAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="refresh_rate" type="intAttribute" minOccurs="0" maxOccurs="1" />
+			
+			<!--Here we can add support for more restrictions between nodes-->
+			<xs:element name="rest_betw_nodes" minOccurs="0" maxOccurs="1">
+			<xs:complexType>
+				<xs:all>
+					<xs:element name="bandwidth" type="floatAttribute" minOccurs="0" maxOccurs="1" />
+					<xs:element name="latency" type="floatAttribute" minOccurs="0" maxOccurs="1" />
+				</xs:all>
+			</xs:complexType>
+			</xs:element>
+	
+		</xs:all>
+		
+	</xs:complexType>
+
+</xs:schema>

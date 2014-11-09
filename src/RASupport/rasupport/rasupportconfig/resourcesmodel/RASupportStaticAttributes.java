@@ -1,10 +1,11 @@
 package RASupport.rasupport.rasupportconfig.resourcesmodel;
 
-import java.util.Arrays;
-import java.util.List;
 import RASupport.rasupport.rasupportconfig.common.RASupportCommon;
+import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeCategories.*;
 import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeTypes.*;
 import static RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportResources.*;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -78,4 +79,27 @@ public enum RASupportStaticAttributes implements RASupportAttributesInterface {
     public Number getAllowedMaxValue() { return allowedMaxValue; }
     @Override
     public List<String> getAllowedValues() { return allowedValues; }
+    
+    @Override
+    public boolean isNumerical() {
+        return (type.equals(FLOAT_ATTRIBUTE) || type.equals(INT_ATTRIBUTE));
+    }
+    @Override
+    public boolean isString() {
+        return type.equals(STRING_ATTRIBUTE);
+    }
+    @Override
+    public RASupportCommon.AttributeCategories getCategory() {
+        return STATIC_ATTRIBUTE;
+    }
+    
+    @Override
+    public boolean isFloat() {
+        return type.equals(FLOAT_ATTRIBUTE);
+    }
+
+    @Override
+    public boolean isInteger() {
+        return type.equals(INT_ATTRIBUTE);
+    }
 }

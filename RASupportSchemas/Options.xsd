@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	elementFormDefault="qualified">
+
+	<!--Add more querie options here-->	
+	<!--Each query option represents a protocol for the selection phase-->
+	<xs:simpleType name="options">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="requires:find_resources" /><!--Imperatively find resources-->
+			<xs:enumeration value="requires:performance" /><!--Use iRandomWalks-->
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>

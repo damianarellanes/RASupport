@@ -1,12 +1,14 @@
 package RASupport.rasupport.rasupportconfig.resourcesmodel;
 
+import RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeCategories;
+import RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeTypes;
+import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeTypes.*;
+import static RASupport.rasupport.rasupportconfig.common.RASupportErrors.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import RASupport.rasupport.rasupportconfig.common.RASupportCommon.*;
-import static RASupport.rasupport.rasupportconfig.common.RASupportErrors.*;
 
 /**
  * RASupportConfig: manages all the allowed attributes in the support 
@@ -25,6 +27,13 @@ public class RASupportAttributes {
     private static final String methodMinVal = "getAllowedMinValue";
     private static final String methodMaxVal = "getAllowedMaxValue";
     private static final String methodAllowedValues = "getAllowedValues";
+    
+    private static final String classDynamicAttributes = 
+            RASupportDynamicAttributes.class.getCanonicalName();
+    private static final String classStaticAttributes = 
+            RASupportStaticAttributes.class.getCanonicalName();
+    
+    private static final Class attributesInterface = RASupportAttributesInterface.class;
     
     public static String getAttributeName (Object attribute) {
         return (String) invokeMethod(methodAlias, attribute);
@@ -48,6 +57,43 @@ public class RASupportAttributes {
     
     public static List<String> getAllowedValues (Object attribute) {
         return (List<String>) invokeMethod(methodAllowedValues, attribute);
+    }
+    
+    public static AttributeCategories getCategory(Object attribute) {
+        
+        if(attribute.getClass().getCanonicalName().equals(classDynamicAttributes)) {
+            return AttributeCategories.DYNAMIC_ATTRIBUTE;
+        }
+        else if(attribute.getClass().getCanonicalName().equals(classStaticAttributes)) {
+            return AttributeCategories.STATIC_ATTRIBUTE;
+        }
+        else {
+            return null;
+        }
+    }
+    
+    public static boolean isNumerical(Object attribute) {
+        
+        if(!isAttribute(attribute)) {
+            return false;
+        }
+        
+        AttributeTypes realType = getAttributeType(attribute);
+        return (realType.equals(INT_ATTRIBUTE) || realType.equals(FLOAT_ATTRIBUTE));
+    }
+    
+    public static boolean isString(Object attribute) {
+        
+        if(!isAttribute(attribute)) {
+            return false;
+        }
+        
+        return getAttributeType(attribute).equals(STRING_ATTRIBUTE);
+    }
+    
+    public static boolean isAttribute(Object obj) {
+                
+        return (attributesInterface.isAssignableFrom(obj.getClass()));
     }
     
     private static Object invokeMethod(

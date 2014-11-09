@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	elementFormDefault="qualified">
+
+	<xs:include schemaLocation="Requirement.xsd" />
+	<xs:include schemaLocation="Attributes.xsd" />
+
+	<xs:complexType name="rest_betw_groups">
+		<xs:all> 
+			<!--Group names can only have any string without commas-->
+			<xs:element name="group_names">
+				<!--<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[^,]+" />
+					</xs:restriction>
+				</xs:simpleType>-->
+			</xs:element>	
+			
+			<!--Here we can add support for more restrictions between groups-->		
+			<xs:element name="bandwidth" type="floatAttribute" minOccurs="0" maxOccurs="1" />
+			<xs:element name="latency" type="floatAttribute" minOccurs="0" maxOccurs="1" />
+	
+		</xs:all>
+		
+	</xs:complexType>
+
+</xs:schema>

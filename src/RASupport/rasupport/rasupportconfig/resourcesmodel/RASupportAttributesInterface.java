@@ -1,7 +1,7 @@
 package RASupport.rasupport.rasupportconfig.resourcesmodel;
 
 import java.util.List;
-import RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeTypes;
+import RASupport.rasupport.rasupportconfig.common.RASupportCommon.*;
 
 /**
  * RASupportConfig: interface for the new enums of allowed attributes
@@ -17,5 +17,12 @@ public interface RASupportAttributesInterface {
     public Number getAllowedMinValue();
     public Number getAllowedMaxValue();
     public List<String> getAllowedValues();
+    
+    public boolean isNumerical();
+    public boolean isString(); 
+    public boolean isFloat();
+    public boolean isInteger();
+    
+    public AttributeCategories getCategory();
     
 }
