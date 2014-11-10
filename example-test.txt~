@@ -390,7 +390,8 @@ control.disconnect.parent_strategy myconet.NullParentStrategy
 control.protocols peersim.cdsim.FullNextCycle
 
 #order.control lo state jg to jc gen protocols oo jv
-order.control cyc lo state jg to protocols oo jv
+#order.control cyc lo state jg to protocols oo jv
+order.control lo state jg to protocols oo jv
 
 #order.control lo state jg to jc co gen msg uo oo ro
 #order.control shf dnet dnet2 disconnect protocols lo state jg oo degree
@@ -425,7 +426,7 @@ order.protocol fail dat lnk fng chem
 #control.nsize.FINAL
 
 ### Control to variate cycles
-control.cyc simulation.CyclesObserver
+#control.cyc simulation.CyclesObserver
 #control.cyc.protocol myc
 #control.cyc.cycles simulation.cycles
 #control.cyc.fileresults cycles5.dat

@@ -1,5 +1,6 @@
 package RASupport.rasupport.rasupportconfig.modules.transportlayer;
 
+import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
 import java.io.File;
 
 /**
@@ -19,7 +20,7 @@ public interface RASupportReceiver {
     public void simulateReceiveXML(File rsFile, String aliasSender, RASupportActions action);
     
     // For any scenario (real or simulation)
-    public void receiveMessage(String message, String aliasSender);
+    public void receiveMessage(String message, RASupportTopologyNode sender, RASupportActions action);
     
     // For simulated scenarios
     public void simulateReceiveMessages(String aliasSender, RASupportActions action, String...messages);

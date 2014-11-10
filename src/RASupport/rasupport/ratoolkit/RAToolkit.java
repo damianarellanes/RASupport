@@ -1,18 +1,24 @@
 package RASupport.rasupport.ratoolkit;
 
-import myconet.MycoNode;
-import RASupport.rasupport.ratoolkit.apismanagement.APIFactory;
-import static RASupport.rasupport.ratoolkit.common.Common.AdvertisementAPIS.*;
-import static RASupport.rasupport.ratoolkit.common.Common.DatabaseManagers.*;
-import RASupport.rasupport.ratoolkit.common.RAToolkitAPI;
-import RASupport.rasupport.ratoolkit.common.RAToolkitAdvertisementAPI;
-import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
-import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManagerFactory;
-import RASupport.rasupport.ratoolkit.transportlayer.RAToolkitReceiver;
+import static RASupport.rasupport.ratoolkit.common.RAToolkitConfigParser.*;
 import RASupport.rasupport.rasupportconfig.common.RASupportNode;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logMessage;
 import RASupport.rasupport.rasupportconfig.modules.RASupportResourceAggregation;
 import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
+import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
+import RASupport.rasupport.ratoolkit.apismanagement.APIFactory;
+import RASupport.rasupport.ratoolkit.common.Common;
+import static RASupport.rasupport.ratoolkit.common.Common.AdvertisementAPIS.*;
+import static RASupport.rasupport.ratoolkit.common.Common.DatabaseManagers.*;
+import RASupport.rasupport.ratoolkit.apismanagement.RAToolkitAPI;
+import RASupport.rasupport.ratoolkit.apismanagement.RAToolkitAdvertisementAPI;
+import RASupport.rasupport.ratoolkit.apismanagement.RAToolkitSelectionAPI;
+import RASupport.rasupport.ratoolkit.common.RAToolkitConfigParser;
+import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
+import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManagerFactory;
+import RASupport.rasupport.ratoolkit.transportlayer.RAToolkitReceiver;
+import java.io.File;
+import myconet.MycoNode;
 
 /**
  * RAToolkit: facade of the toolkit for resource aggregation
@@ -26,13 +32,18 @@ public class RAToolkit implements RASupportResourceAggregation {
     // We can change APIS and the database manager easily because they are modules
     private DatabaseManager databaseManager = null;
     private RAToolkitAdvertisementAPI advertisementAPI = null;
-    private RAToolkitAPI selectionAPI;
+    private RAToolkitSelectionAPI selectionAPI = null;
     private RAToolkitAPI matchingAPI;
     private RAToolkitAPI bindingAPI;
     private RASupportNode peer = null;
     private MycoNode myconetPeer = null;
     
     private RAToolkitReceiver receiver = null;
+    
+    // To initialize the .properties parser for ratookit
+    static {
+        new RAToolkitConfigParser();
+    }
     
     public RAToolkit(RASupportNode peer) {
         
@@ -43,14 +54,15 @@ public class RAToolkit implements RASupportResourceAggregation {
         // Sets the reference to the peer/node
         this.peer = peer;                
         
-        // Sets the reference to MYconet peer
+        // Sets the reference to Myconet peer
         this.myconetPeer = (MycoNode) peer.getTopologyNode();
         
         // Creates APIs                
-        advertisementAPI = APIFactory.createAdvertisementAPI(ADVERTISEMENT_API_DEFAULT, peer, databaseManager);                
+        advertisementAPI = APIFactory.createAdvertisementAPI(ADVERTISEMENT_API_DEFAULT, peer, databaseManager);
+        selectionAPI = APIFactory.createSelectionAPI(Common.SelectionAPIS.SELECTION_API_DEFAULT, peer, databaseManager);
         
-        // Creates the receiver
-        this.receiver = new RAToolkitReceiver(advertisementAPI);
+        // Creates the receiver needed by the transport layer for communication over the P2P overlay network
+        this.receiver = new RAToolkitReceiver(advertisementAPI, selectionAPI);
     }
     
     @Override
@@ -78,5 +90,16 @@ public class RAToolkit implements RASupportResourceAggregation {
     @Override
     public void updateDynamicResource(String attribute, String newValue) {
         advertisementAPI.advertiseUpdating(attribute, newValue);        
+    }
+
+    @Override
+    public void executeQuery(RASupportQuery query) {
+        
+        logMessage(peer.getTopologyNode().getAlias() + " has requested resources");
+    }
+
+    @Override
+    public void executeQuery(File query) {
+        selectionAPI.selectResources(query);
     }
 }

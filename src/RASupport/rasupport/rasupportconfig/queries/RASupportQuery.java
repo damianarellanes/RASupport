@@ -20,6 +20,7 @@ public class RASupportQuery {
     private int ttl = 0;    
     private boolean hasOption;
     private boolean hasTTL;
+    private long queryId = 0; // Identifier of the query (it must be unique and is defined in the selection phase)
     
     // Groups specified in the query
     private RASupportMap<String, RASupportQueryGroup> groups = null;
@@ -219,6 +220,20 @@ public class RASupportQuery {
      */
     public void setGroupRestrictions(RASupportQueryRestrictionSet groupRestrictions) {
         this.groupRestrictions = groupRestrictions;
+    }
+
+    /**
+     * @return the queryId
+     */
+    public long getQueryId() {
+        return queryId;
+    }
+
+    /**
+     * @param queryId the queryId to set
+     */
+    public void setQueryId(long queryId) {
+        this.queryId = queryId;
     }
 
 }

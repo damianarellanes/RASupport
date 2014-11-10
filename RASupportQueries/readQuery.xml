@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <query>
 	<option>requires:find_resources</option>
-	<ttl>4</ttl>
+	<ttl>3</ttl>
 	<group>
 		<name>Processing</name>
 		<num_nodes>8</num_nodes>
@@ -12,8 +12,8 @@
 		<busy_cpu>0.0,0.0,30.0,75.0,0.05</busy_cpu>
 		<os_name>0.0,0.0</os_name>
 		<rest_betw_nodes>
-			<latency>10.199999809265137,22.100000381469727,30.0,50.0,0.02</latency>
-			<bandwidth>10.199999809265137,22.100000381469727,30.0,50.0,0.02</bandwidth>
+			<latency>0.0,0.0,10.199999809265137,20.399999618530273,0.9</latency>
+			<bandwidth>0.0,0.0,10.199999809265137,20.399999618530273,0.9</bandwidth>
 		</rest_betw_nodes>
 	</group>
 	<group>

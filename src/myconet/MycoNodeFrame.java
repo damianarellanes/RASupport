@@ -20,17 +20,7 @@
 
 package myconet;
 
-import peersim.config.*;
-import peersim.core.*;
-import peersim.util.*;
-import java.util.*;
-import java.util.logging.*;
-
-import java.awt.*;
-import java.awt.geom.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import RASupport.rasupport.rasupportconfig.common.RASupportCommon;
 import edu.uci.ics.jung.algorithms.importance.*;
 import edu.uci.ics.jung.algorithms.layout.*;
 import edu.uci.ics.jung.algorithms.util.*;
@@ -41,8 +31,21 @@ import edu.uci.ics.jung.visualization.control.*;
 import edu.uci.ics.jung.visualization.decorators.*;
 import edu.uci.ics.jung.visualization.picking.*;
 import edu.uci.ics.jung.visualization.renderers.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.geom.*;
+import java.io.File;
+import java.util.*;
+import java.util.logging.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import org.apache.commons.collections15.*;
 import org.apache.commons.collections15.functors.*;
+import peersim.config.*;
+import peersim.core.*;
+import peersim.util.*;
 
 public class MycoNodeFrame extends JFrame implements ChangeListener {
   public MycoNode node;
@@ -185,15 +188,26 @@ public class MycoNodeFrame extends JFrame implements ChangeListener {
         }
       };
     closeButton.addActionListener(closer);
-
+    
     buttonPane.add(Box.createHorizontalGlue());
     buttonPane.add(updateButton);
     buttonPane.add(Box.createRigidArea(new Dimension(5,0)));
-    buttonPane.add(closeButton);
+    buttonPane.add(closeButton);        
 
     refreshData();
 
     JungGraphObserver.addChangeListener(this);
+    
+    /* RASUPPORT */
+    JButton queryButton = new JButton("Perform query");
+    ActionListener queryListener = new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            performQuery();
+        }
+      };  
+    queryButton.addActionListener(queryListener);    
+    buttonPane.add(queryButton);
+    /* RASUPPORT */    
 
     this.pack();
     this.setVisible(true);
@@ -203,6 +217,23 @@ public class MycoNodeFrame extends JFrame implements ChangeListener {
     JungGraphObserver.removeChangeListener(this);
     dispose();
   }
+  
+  /* RASUPPORT */
+  public void performQuery() {
+      
+        System.err.println("QUERY!!!");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setApproveButtonText("Execute query");
+        fileChooser.setCurrentDirectory(new File(RASupportCommon.queriesDirectory));
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("XML query","xml"));
+        int status = fileChooser.showOpenDialog(fileChooser);
+        
+        if (status == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            this.node.getRASupport().executeQuery(selectedFile);
+        } 
+  }
+  /* RASUPPORT */
 
   public void stateChanged(ChangeEvent e) {
     if (e.getSource() == handler) {

@@ -1,7 +1,5 @@
 package RASupport.rasupport.rasupportmain;
 
-import static java.lang.System.exit;
-import RASupport.rasupport.rasupportmain.modulesmanagement.RASupportModulesFactory;
 import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeCategories.*;
 import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.RASupportMode.*;
 import static RASupport.rasupport.rasupportconfig.common.RASupportErrorsManager.*;
@@ -9,11 +7,15 @@ import RASupport.rasupport.rasupportconfig.common.RASupportNode;
 import static RASupport.rasupport.rasupportconfig.config.RASupportConfigParser.*;
 import static RASupport.rasupport.rasupportconfig.modules.RASupportModulesConfiguration.ResourceManagers.*;
 import static RASupport.rasupport.rasupportconfig.modules.RASupportModulesConfiguration.ResourceMonitors.*;
-import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportReceiver;
 import RASupport.rasupport.rasupportconfig.modules.RASupportResourceAggregation;
 import RASupport.rasupport.rasupportconfig.modules.RASupportResourceManager;
 import RASupport.rasupport.rasupportconfig.modules.RASupportResourceMonitor;
 import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
+import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportReceiver;
+import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
+import RASupport.rasupport.rasupportmain.modulesmanagement.RASupportModulesFactory;
+import java.io.File;
+import static java.lang.System.exit;
 
 /**
  * RASupportMain: facade for RASupport
@@ -54,7 +56,7 @@ public class RASupportMain {
             // We need imperatively a resource monitor
             if(existsAttributeMonitor(resourceMonitor)) {
                 // Starts the dynamic resources monitor            
-                resourceMonitor.startMonitor();            
+                //resourceMonitor.startMonitor();            
             }
             else {
                 exit(0);
@@ -131,5 +133,21 @@ public class RASupportMain {
     
     public RASupportReceiver getReceiver() {
         return resourceAggregation.getReceiver();
+    }
+    
+    /**************************************************************************    
+    * SELECTION METHODS     
+    **************************************************************************/
+    
+    // For this method, the client must to create a query object
+    public void executeQuery(RASupportQuery query) {
+        resourceAggregation.executeQuery(query);
+    }
+    
+    // For this method, the resource aggregation module parses the XML file
+    public void executeQuery(File queryFile) {
+        
+        
+        resourceAggregation.executeQuery(queryFile);
     }
 }

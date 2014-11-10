@@ -154,10 +154,13 @@ public class QueriesTest {
         // Esta línea imprime un mensaje en caso de haber obtenido una consulta válida
         File f = query.getXMLQuery();
                 
-        XMLQueryReader qw = new XMLQueryReader(f.getAbsolutePath(), RASupportCommon.RASupportQueryReader.INSIDE);
+        XMLQueryReader qw = new XMLQueryReader("query.xml", RASupportCommon.RASupportQueryReader.INSIDE);
         RASupportQuery query2 = qw.getQuery(); 
-        query2.saveXMLQuery("readQuery");        
-        System.out.println(query2);
+        query2.saveXMLQuery("readQuery");   
+        
+        if(query2.isConsistent()) {
+            System.out.println(query2);
+        }           
         
         //QueriesTest.validate();
     }

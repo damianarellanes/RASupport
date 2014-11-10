@@ -1,4 +1,4 @@
-package RASupport.rasupport.ratoolkit.common;
+package RASupport.rasupport.ratoolkit.apismanagement;
 
 import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgentInitial;
 import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgentUpdating;

@@ -1,6 +1,6 @@
 # Configuration of RASupport 1.0
 
-# Alias of the peer. This parameter is ommited, because we are using random mode. Default: "peer"+idPeer
+# Alias of the peer. This parameter is ommited, because we are using random mode. In random mode we use as alias: "peer"+idPeer
 peer_alias = "peerFoo"
 
 # Execution mode of RASupport
@@ -8,6 +8,9 @@ mode=random
 
 # Toolkit for resource aggregation to use
 toolkit=ratoolkit
+
+### RAToolkit configuration
+ratoolkit.max_exclusion=-1
 
 # Use restriction: availability of the peer
 use_restriction.availability.start=00:00

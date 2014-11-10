@@ -4,11 +4,11 @@ import RASupport.rasupport.rasupportconfig.common.RASupportNode;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logMessage;
 import RASupport.rasupport.ratoolkit.advertisementapi.agents.*;
 import RASupport.rasupport.ratoolkit.advertisementapi.rs.RSpec;
-import RASupport.rasupport.ratoolkit.common.RAToolkitAdvertisementAPI;
+import RASupport.rasupport.ratoolkit.apismanagement.RAToolkitAdvertisementAPI;
 import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
 import myconet.MycoNode;
-import simulation.CyclesObserver;// Only for experiments
-import simulation.NetworkObserver;
+import simulation.CyclesObserver; // Only for experiments
+import simulation.NetworkObserver; // Only for experiments
 
 /**
  * RAToolkit: facade of the resource advertisement API

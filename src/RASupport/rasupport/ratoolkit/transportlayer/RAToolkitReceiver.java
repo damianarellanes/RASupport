@@ -1,12 +1,16 @@
 package RASupport.rasupport.ratoolkit.transportlayer;
 
-import java.io.File;
+import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
 import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportActions;
 import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportReceiver;
 import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgentInitial;
 import RASupport.rasupport.ratoolkit.advertisementapi.agents.AdvertisementAgentUpdating;
-import RASupport.rasupport.ratoolkit.common.RAToolkitAdvertisementAPI;
+import RASupport.rasupport.ratoolkit.apismanagement.RAToolkitAdvertisementAPI;
+import RASupport.rasupport.ratoolkit.apismanagement.RAToolkitSelectionAPI;
+import RASupport.rasupport.ratoolkit.common.*;
 import static RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages.*;
+import java.io.File;
+import myconet.MycoNode;
 
 /**
  * RAToolkit: receiver from RAToolkit
@@ -14,10 +18,14 @@ import static RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages.*;
  */
 public class RAToolkitReceiver implements RASupportReceiver {
     
+    // The receiver needs a reference to each API in order to perform actions
     RAToolkitAdvertisementAPI advertisementAPI;
+    RAToolkitSelectionAPI selectionAPI;
     
-    public RAToolkitReceiver(RAToolkitAdvertisementAPI adv) {
+    public RAToolkitReceiver(RAToolkitAdvertisementAPI adv, RAToolkitSelectionAPI sel) {
+        
         this.advertisementAPI = adv;
+        this.selectionAPI = sel;        
     }
     
     @Override
@@ -36,33 +44,27 @@ public class RAToolkitReceiver implements RASupportReceiver {
     }
 
     @Override
-    public void receiveXML() {
-        // TODO implement
-        // Write the received XML in a file
-        // Path rsPath = getPath of the XML created
-        // this.resourceAggregation.updateRSindex(rsPath);
-        
+    public void receiveXML() {        
         throw new UnsupportedOperationException("Not supported yet."); 
     }
     
     @Override
     public void simulateReceiveXML(File rsFile, String aliasSender, RASupportActions action) {
-       
-        if(action.equals(CREATE_RS)) {
-            //advertisementAPI.receiveRS(rsFile, aliasSender);
-        }
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
-    public void receiveMessage(String message, String aliasSender) {        
+    public void receiveMessage(String message, RASupportTopologyNode sender, RASupportActions action) { 
+        
+        // Test query since the received query id
+        if(action.equals(TEST_QUERY)) {
+            selectionAPI.testQuery(Long.parseLong(message), (MycoNode) sender);
+        }
     }
     
     @Override
     public void simulateReceiveMessages(String aliasSender, RASupportActions action, String...messages) {
-        
-        if(action.equals(UPDATE_ATTRIBUTE)) {
-            //advertisementAPI.receiveUpdating(messages[0], messages[1], aliasSender);
-        }
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
 }

@@ -18,7 +18,7 @@ public interface Common {
     enum DatabaseManagers { SQLITE }
     
     // Agents involved
-    enum Agents { AGENT_ADVERTISEMENT_INITIAL,  AGENT_ADVERTISEMENT_UPDATING }
+    enum Agents { AGENT_ADVERTISEMENT_INITIAL,  AGENT_ADVERTISEMENT_UPDATING, AGENT_QUERY }
     
     // Advertisement APIS
     AdvertisementAPIS defaultAdvertisementAPI = ADVERTISEMENT_API_DEFAULT;

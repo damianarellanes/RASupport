@@ -28,9 +28,12 @@ public class RAToolkitSender {
         receiver.getRASupport().getReceiver().simulateReceiveXML(xmlPath, sender.getAlias(), action);
 
     }
-
-    public static void sendMessage(String message, RASupportTopologyNode sender, RASupportTopologyNode receiver) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+    
+    // Sends a message from sender to receiver informing that the latter must to perform a specific action
+    public static void sendMessage(String message, RASupportTopologyNode sender, RASupportTopologyNode receiver, 
+            RASupportActions action) {
+        
+        receiver.getRASupport().getReceiver().receiveMessage(message, sender, action);
     }
     
     public static void sendMessages(RASupportTopologyNode sender, RASupportTopologyNode receiver,

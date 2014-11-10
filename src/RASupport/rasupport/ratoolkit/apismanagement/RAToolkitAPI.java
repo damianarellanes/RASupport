@@ -1,4 +1,4 @@
-package RASupport.rasupport.ratoolkit.common;
+package RASupport.rasupport.ratoolkit.apismanagement;
 
 /**
  * RAToolkit: this is the class that all the facades of the APIS must to implement
