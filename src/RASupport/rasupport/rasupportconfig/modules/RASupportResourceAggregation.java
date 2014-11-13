@@ -23,6 +23,5 @@ public interface RASupportResourceAggregation extends RASupportModule {
     
     // This method performs the key phases of the resource aggregation
     public void executeQuery(RASupportQuery query);
-    public void executeQuery(File query);
 
 }

@@ -95,11 +95,7 @@ public class RAToolkit implements RASupportResourceAggregation {
     @Override
     public void executeQuery(RASupportQuery query) {
         
-        logMessage(peer.getTopologyNode().getAlias() + " has requested resources");
-    }
-
-    @Override
-    public void executeQuery(File query) {
+        //logMessage(peer.getTopologyNode().getAlias() + " has requested resources");
         selectionAPI.selectResources(query);
     }
 }

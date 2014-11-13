@@ -1,0 +1,39 @@
+/*SELECT * FROM Attributes WHERE nameAttribute='busy_cpu' OR nameAttribute='cores'*/
+/*SELECT * FROM Attributes WHERE  (nameAttribute='busy_cpu' AND CAST(valueAttribute AS INTEGER)  BETWEEN 0 AND 100) 
+AND (nameAttribute='os_name' AND valueAttribute='Linux')*/
+
+/*SELECT namePeer, nameAttribute, valueAttribute FROM Attributes INNER JOIN Peers WHERE Attributes.idPeer = Peers.idPeer*/
+
+/*SELECT idPeer, nameAttribute, valueAttribute FROM Attributes  WHERE (nameAttribute='busy_cpu' AND CAST(valueAttribute AS INTEGER)  BETWEEN 0 AND 100)  UNION
+SELECT idPeer, nameAttribute, valueAttribute FROM Attributes  WHERE (nameAttribute='os_name' AND valueAttribute='Linux') */
+
+/*SELECT idPeer, nameAttribute,valueAttribute FROM Attributes
+WHERE valueAttribute IN 
+ ('Linux', 'HP UX')*/
+ 
+/*SELECT idPeer, COUNT(*) as count FROM (
+SELECT idPeer, nameAttribute, valueAttribute FROM Attributes  WHERE (nameAttribute='busy_cpu' AND CAST(valueAttribute AS INTEGER)  BETWEEN 0 AND 100)  UNION 
+SELECT idPeer, nameAttribute, valueAttribute FROM Attributes  WHERE (nameAttribute='os_name' AND valueAttribute='Linux')  UNION 
+SELECT idPeer, nameAttribute, valueAttribute FROM Attributes  WHERE (nameAttribute='latency' AND valueAttribute='128.73') UNION 
+SELECT idPeer, nameAttribute, valueAttribute FROM Attributes  WHERE (nameAttribute='cores' AND valueAttribute='6')
+) group by idpeer having count(*) = 4;*/
+
+SELECT idPeer FROM Attributes WHERE (nameAttribute='os_name' AND valueAttribute='Linux')
+/*SELECT idPeer, COUNT(*) as count FROM Attributes WHERE (nameAttribute='os_name' AND valueAttribute='Linux')
+ OR (nameAttribute='free_mem' AND CAST(valueAttribute AS DOUBLE) BETWEEN 10.0 AND 16000.0)
+ OR (nameAttribute='free_hdisk' AND CAST(valueAttribute AS DOUBLE) BETWEEN 0.0 AND 1000000.0)
+ OR (nameAttribute='busy_cpu' AND CAST(valueAttribute AS DOUBLE) BETWEEN 0.0 AND 100.0)
+ OR (nameAttribute='cpu_speed' AND CAST(valueAttribute AS DOUBLE) BETWEEN 500.0 AND 5000.0)
+ OR (nameAttribute='cores' AND CAST(valueAttribute AS DOUBLE) BETWEEN 1 AND 8)*/
+
+/*SELECT idPeer, COUNT(*) as count 
+FROM attributes
+WHERE (nameAttribute='busy_cpu' AND CAST(valueAttribute AS DOUBLE)  BETWEEN 0 AND 100)  
+OR (nameAttribute='os_name' AND valueAttribute='Linux')  
+OR (nameAttribute='latency' AND valueAttribute='128.73')  
+OR (nameAttribute='cores' AND valueAttribute='6')
+GROUP BY idPeer having count(*) = 4*/
+
+/*SELECT * FROM Attributes WHERE  (nameAttribute='busy_cpu' AND CAST(valueAttribute AS INTEGER)  BETWEEN 0 AND 100)  AND  (nameAttribute='cores' AND CAST(valueAttribute AS INTEGER)  BETWEEN 0 AND 100) */
+
+/*SELECT * FROM Attributes WHERE  (nameAttribute='busy_cpu' AND CAST(valueAttribute AS INTEGER)  BETWEEN 0 AND 100)  AND  (nameAttribute='cores' AND CAST(valueAttribute AS INTEGER)  BETWEEN 0 AND 100) */

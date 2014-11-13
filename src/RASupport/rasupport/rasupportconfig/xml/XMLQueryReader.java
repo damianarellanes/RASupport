@@ -12,7 +12,9 @@ import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
+import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logWarning;
+import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
 import RASupport.rasupport.rasupportconfig.queries.RASupportGroupRestrictions;
 import RASupport.rasupport.rasupportconfig.queries.RASupportNodeRestrictions;
 import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
@@ -57,7 +59,7 @@ public class XMLQueryReader {
     private XMLInputFactory factory;    
     private InputStream inStream;
     private XMLStreamReader reader;
-    private RASupportQuery query;
+    private RASupportQuery query = null;
     
     private boolean queryFlag = false;
     private boolean option = false;
@@ -79,25 +81,26 @@ public class XMLQueryReader {
     RASupportQueryRestrictionSet restrictionGroups = null;
     RASupportGroupRestrictions groupRestriction = null;
     
-    public XMLQueryReader(String xmlPath, RASupportQueryReader readerType) {
+    public XMLQueryReader(String xmlPath, RASupportTopologyNode requestor) {
         
         File document = new File(xmlPath);
         String xmString = document.getName();
         
+        
         // If the file is outside, we create a copy in te queries directory
-        if(readerType.equals(RASupportQueryReader.OUTSIDE)) {
-            new File(RASupportCommon.queriesDirectory + "/" + xmlName);
-        }
+        new File(RASupportCommon.queriesDirectory + "/" + xmlName);
         
         try {
             
-            // Tries to validate the XML file
-            validate(document);
+            // Tries to isValidDocument the XML file
+            if(!isValidDocument(document)) {
+               return; 
+            }
             
             factory = XMLInputFactory.newInstance();
             inStream = new FileInputStream(document);
             reader = factory.createXMLStreamReader(inStream);
-            query = new RASupportQuery();
+            query = new RASupportQuery(requestor);
             
             readXMLQuery();
         } catch (FileNotFoundException | XMLStreamException e) {
@@ -109,7 +112,7 @@ public class XMLQueryReader {
         }
     }
     
-    public void validate(File document) throws XMLStreamException, FileNotFoundException, IOException {
+    public boolean isValidDocument(File document) throws XMLStreamException, FileNotFoundException, IOException {
         
         try {
             SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -121,7 +124,10 @@ public class XMLQueryReader {
             validator.validate(new StAXSource(xmlStreamReader));
         } catch (SAXException e) {
             e.printStackTrace();
+            return false;
         }
+        
+        return true;
     }
     
     public RASupportQuery getQuery() {
@@ -457,13 +463,13 @@ public class XMLQueryReader {
                 penalty = Double.parseDouble(arguments[1]);
                 
                 if(container.equals("GROUP")) {
-                    group.addStringAttribute(attribute, arguments[1], penalty);
+                    group.addStringAttribute(attribute, arguments[0], penalty);
                 }   
                 else if(container.equals("NODE_RESTRICTIONS")) {
-                    restrictionNodes.addStringRestriction(nodeRestriction, arguments[1], penalty);
+                    restrictionNodes.addStringRestriction(nodeRestriction, arguments[0], penalty);
                 }
                 else if(container.equals("GROUP_RESTRICTIONS")) {                    
-                    restrictionGroups.addStringRestriction(groupRestriction, arguments[1], penalty);
+                    restrictionGroups.addStringRestriction(groupRestriction, arguments[0], penalty);
                 }                
                 
             } catch(NumberFormatException e3) {

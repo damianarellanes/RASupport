@@ -29,6 +29,13 @@ public class RAToolkitSender {
 
     }
     
+    // This is used for send a message and receive an acknowledge
+    public static RASupportActions sendSyncMessage(String message, RASupportTopologyNode sender, RASupportTopologyNode receiver, 
+            RASupportActions action) {
+        
+        return receiver.getRASupport().getReceiver().receiveSyncMessage(message, sender, action);
+    }
+    
     // Sends a message from sender to receiver informing that the latter must to perform a specific action
     public static void sendMessage(String message, RASupportTopologyNode sender, RASupportTopologyNode receiver, 
             RASupportActions action) {

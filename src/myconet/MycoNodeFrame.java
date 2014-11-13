@@ -79,7 +79,8 @@ public class MycoNodeFrame extends JFrame implements ChangeListener {
 
   public MycoNodeFrame(MycoNode node) {
     this.node = node;
-    this.setTitle("Node " + node.getID());
+    //this.setTitle("Node " + node.getID());
+    this.setTitle(node.getAlias());
 
     graph = JungGraphObserver.getGraph();
 
@@ -220,15 +221,14 @@ public class MycoNodeFrame extends JFrame implements ChangeListener {
   
   /* RASUPPORT */
   public void performQuery() {
-      
-        System.err.println("QUERY!!!");
+              
         JFileChooser fileChooser = new JFileChooser();
+        
         fileChooser.setApproveButtonText("Execute query");
         fileChooser.setCurrentDirectory(new File(RASupportCommon.queriesDirectory));
         fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("XML query","xml"));
-        int status = fileChooser.showOpenDialog(fileChooser);
         
-        if (status == JFileChooser.APPROVE_OPTION) {
+        if (fileChooser.showOpenDialog(fileChooser) == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             this.node.getRASupport().executeQuery(selectedFile);
         } 

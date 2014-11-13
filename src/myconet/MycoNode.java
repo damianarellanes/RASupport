@@ -163,12 +163,16 @@ public class MycoNode extends GeneralNode implements Node, Comparable, RASupport
     private RASupportMain raSupport;
     
     // In myconet, we return the super-peer in charge of this peer    
-    public MycoNode getSuperpeer() {        
-        HyphaLink link = this.getHyphaLink();
+    public MycoNode getSuperpeer() {
+        
+        // Only can be executed by normal-peers
+        if(isBiomass()) {
+            HyphaLink link = this.getHyphaLink();
             
-        if(!link.getHyphae().isEmpty()) {
-            return link.getHyphae().get(0);            
-        }
+            if(!link.getHyphae().isEmpty()) {
+                return link.getHyphae().get(0);            
+            }
+        }        
         
         return null;
     }

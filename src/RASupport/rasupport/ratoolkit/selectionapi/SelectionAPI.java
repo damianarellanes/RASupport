@@ -1,13 +1,15 @@
 package RASupport.rasupport.ratoolkit.selectionapi;
 
-import RASupport.rasupport.rasupportconfig.common.RASupportCommon;
 import RASupport.rasupport.rasupportconfig.common.RASupportNode;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logMessage;
+import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportActions;
 import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
-import RASupport.rasupport.rasupportconfig.xml.XMLQueryReader;
 import RASupport.rasupport.ratoolkit.apismanagement.RAToolkitSelectionAPI;
 import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
+import RASupport.rasupport.ratoolkit.selectionapi.agents.QueryAgent;
 import RASupport.rasupport.ratoolkit.selectionapi.agents.SelectionManager;
+import static RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages.*;
+import RASupport.rasupport.ratoolkit.transportlayer.RAToolkitSender;
 import java.io.File;
 import myconet.MycoNode;
 
@@ -33,7 +35,7 @@ public class SelectionAPI implements RAToolkitSelectionAPI {
         this.myconetAlias = myconetPeer.getAlias();
         
         // Sets the database manager
-        this.databaseManager = dbMan;
+        this.databaseManager = dbMan;        
         
         // Creates the manager of query agents
         this.selectionManager = new SelectionManager(myconetPeer, dbMan);
@@ -47,27 +49,31 @@ public class SelectionAPI implements RAToolkitSelectionAPI {
     @Override
     public void selectResources(RASupportQuery query) {
         
-        if(query.isConsistent()) {
-            // Starts selection phase
-            logMessage(myconetAlias + " has requested resources");
+        // Starts selection phase        
+        logMessage(myconetAlias + "->" + query.getRequestor().getAlias() + " has requested resources");
+        logMessage("queryID -> " + query.getQueryId());
+        selectionManager.startSelection(query);
+    }
+
+    @Override
+    public RASupportActions testQuery(long idQuery) {
+        
+        if(selectionManager.hasReceivedQuery(idQuery)) {
+            
+            return RECEIVED_QUERY;
+        }
+        else {
+            return NO_RECEIVED_QUERY;
         }
     }
 
     @Override
-    public void selectResources(File queryFile) {
+    public void receiveQueryAgent(QueryAgent queryAgent) {
         
-        // Creates a query object taking into account the specified query file
-        XMLQueryReader qw = new XMLQueryReader(queryFile.getAbsolutePath(), RASupportCommon.RASupportQueryReader.INSIDE);
-        RASupportQuery query = qw.getQuery();
+        logMessage("SUPER-PEER " + myconetAlias + " has received a query agent with the query " + 
+                queryAgent.getQuery().getQueryId());
         
-        if(query.isConsistent()) {
-            // Starts selection phase
-            logMessage(myconetAlias + " has requested resources");
-        }
-    }
-
-    @Override
-    public void testQuery(long idQuery, MycoNode sender) {
+        queryAgent.performSelectionIn(myconetPeer);
         
     }
     

@@ -1,6 +1,8 @@
 package RASupport.rasupport.ratoolkit.apismanagement;
 
+import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportActions;
 import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
+import RASupport.rasupport.ratoolkit.selectionapi.agents.QueryAgent;
 import java.io.File;
 import myconet.MycoNode;
 
@@ -14,8 +16,8 @@ public interface RAToolkitSelectionAPI {
     
     public void selectResources(RASupportQuery query);
     
-    public void selectResources(File queryFile);
+    public RASupportActions testQuery(long idQuery); // Returns an acknowledge as reponse
     
-    public void testQuery(long idQuery,  MycoNode sender);
+    public void receiveQueryAgent(QueryAgent queryAgent);
     
 }

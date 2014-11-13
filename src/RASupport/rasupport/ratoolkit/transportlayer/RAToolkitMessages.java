@@ -21,7 +21,22 @@ public enum RAToolkitMessages implements RASupportActions {
     /**************************************************************************/
     // SELECTION MESSAGES
     /**************************************************************************/
+    // To notify a super-peer that it should be a query originator
+    REQUEST_QUERY,
+    
+    // Message sent by query agents to visit a SP
+    VISIT_SP,
+    
     // To test if the current peer has received previously a specific query agent transporting a specific query
-    TEST_QUERY;
+    TEST_QUERY,
+    
+    // Notifies that the sender has received the query
+    RECEIVED_QUERY,
+    
+    // Notifies that the sender has not received the query
+    NO_RECEIVED_QUERY,
+    
+    // This message is sent from query agents to their respective super-peer initiator when they finish their tasks
+    QUERY_AGENT_FINISHED;
     
 }

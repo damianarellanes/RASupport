@@ -71,8 +71,24 @@ public class RASupportQueryRequirement {
             return TagsConfiguration.orderQueryNumericalRequirement(min_val, min_ideal, max_ideal, max_val, penalty);
         }
         else {
-            return TagsConfiguration.orderQueryStringRequirement(value, penalty);
+            return TagsConfiguration.orderQueryStringRequirement(getValue(), penalty);
         }        
+    }
+    
+    public boolean isNumerical() {
+        return isNumerical;
+    }
+    
+    public boolean isString() {
+        return isString;
+    }
+    
+    public boolean isInteger() {
+        return attribute.isInteger();
+    }
+    
+    public boolean isFloat() {
+        return attribute.isFloat();
     }
 
     /**
@@ -162,6 +178,13 @@ public class RASupportQueryRequirement {
     @Override
     public String toString() {
         return getContent();
+    }
+
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
     }
 
 }

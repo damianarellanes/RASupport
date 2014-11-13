@@ -62,7 +62,7 @@ public class QueriesTest {
             /*Validator validator = schema.newValidator();
             XMLInputFactory xmlFactory = XMLInputFactory.newFactory();
             XMLEventReader reader = xmlFactory.createXMLEventReader(new FileInputStream(file1));
-            validator.validate(new StAXSource(reader));*/
+            validator.isValidDocument(new StAXSource(reader));*/
         } catch (SAXException e) {
             e.printStackTrace();
         }
@@ -112,7 +112,7 @@ public class QueriesTest {
         File queryFile = query.getXMLQuery(); // Regla 11*/
         
         // Creamos la consulta
-        RASupportQuery query = new RASupportQuery(RASupportQueryOptions.FIND_RESOURCES, 4); 
+        /*RASupportQuery query = new RASupportQuery(RASupportQueryOptions.FIND_RESOURCES, 4); 
         
         // Creamos un grupo llamado "Processing" con 6 atributos
         RASupportQueryGroup processing = new RASupportQueryGroup("Processing", 8);        
@@ -162,7 +162,7 @@ public class QueriesTest {
             System.out.println(query2);
         }           
         
-        //QueriesTest.validate();
+        //QueriesTest.isValidDocument();*/
     }
 
 }

@@ -1,9 +1,7 @@
 package RASupport.rasupport.rasupportconfig.queries;
 
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logMessage;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logWarning;
+import static RASupport.rasupport.rasupportconfig.log.LogManager.*;
+import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
 import RASupport.rasupport.rasupportconfig.xml.XMLQueryWriter;
 import java.io.File;
@@ -19,15 +17,22 @@ public class RASupportQuery {
     private RASupportQueryOptions option = null;
     private int ttl = 0;    
     private boolean hasOption;
-    private boolean hasTTL;
-    private long queryId = 0; // Identifier of the query (it must be unique and is defined in the selection phase)
+    private boolean hasTTL;   
     
     // Groups specified in the query
     private RASupportMap<String, RASupportQueryGroup> groups = null;
     // Restrictions between groups in the query
     private RASupportQueryRestrictionSet groupRestrictions = null;
+        
+    private RASupportTopologyNode requestor = null; // Requestor of the query
+    private long queryId = 0; // Identifier of the query 
+    private boolean isTraveling; // When a query is traveling around the network
     
-    public RASupportQuery() {
+    public RASupportQuery(RASupportTopologyNode requestor) {
+        
+        this.isTraveling = false;
+        this.requestor = requestor;
+        computeQueryCode();
                 
         this.groups = new RASupportMap<>();
         this.groupRestrictions = new RASupportQueryRestrictionSet();
@@ -36,7 +41,12 @@ public class RASupportQuery {
         hasTTL = false;
     }
     
-    public RASupportQuery(RASupportQueryOptions option, int ttl) {
+    public RASupportQuery(RASupportQueryOptions option, int ttl, RASupportTopologyNode requestor) {
+        
+        this.isTraveling = false;
+        this.requestor = requestor;
+        computeQueryCode();
+        
         this.option = option;
         this.ttl = ttl;
         
@@ -108,6 +118,13 @@ public class RASupportQuery {
     public boolean isConsistent() {
         
         boolean consistent = true;
+        
+        if(this == null) {
+            logError("XML querie is invalid", 
+                    this.getClass());            
+            consistent = false;
+        }
+        
         if(!hasOption || !hasTTL) {
             logWarning("XML queries must have one option and one TTL", 
                     this.getClass());            
@@ -165,6 +182,13 @@ public class RASupportQuery {
                 "Groups: " + getGroups() + "\n" + 
                 "Group restrictions: " + getGroupRestrictions() +"\n";
     } 
+    
+    // Method to calculate the code from a specific query
+    // In particular, RAToolkit use: query_hash_code + peerAlias_hash_code + queryAgent_hash_code
+    private void computeQueryCode() {
+        
+        queryId = (toString() + requestor.toString()).hashCode();
+    }
 
     /**
      * @return the option
@@ -234,6 +258,35 @@ public class RASupportQuery {
      */
     public void setQueryId(long queryId) {
         this.queryId = queryId;
+    }
+
+    /**
+     * @return the requestor
+     */
+    public RASupportTopologyNode getRequestor() {
+        return requestor;
+    }
+
+    /**
+     * @param requestor the requestor to set
+     */
+    public void setRequestor(RASupportTopologyNode requestor) {
+        this.requestor = requestor;
+        computeQueryCode();
+    }
+
+    /**
+     * @return the isTraveling
+     */
+    public boolean isTraveling() {
+        return isTraveling;
+    }
+
+    /**
+     * @param isTraveling the isTraveling to set
+     */
+    public void setIsTraveling(boolean isTraveling) {
+        this.isTraveling = isTraveling;
     }
 
 }

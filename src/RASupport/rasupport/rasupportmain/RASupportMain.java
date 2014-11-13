@@ -1,5 +1,6 @@
 package RASupport.rasupport.rasupportmain;
 
+import RASupport.rasupport.rasupportconfig.common.RASupportCommon;
 import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.AttributeCategories.*;
 import static RASupport.rasupport.rasupportconfig.common.RASupportCommon.RASupportMode.*;
 import static RASupport.rasupport.rasupportconfig.common.RASupportErrorsManager.*;
@@ -13,6 +14,7 @@ import RASupport.rasupport.rasupportconfig.modules.RASupportResourceMonitor;
 import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
 import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportReceiver;
 import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
+import RASupport.rasupport.rasupportconfig.xml.XMLQueryReader;
 import RASupport.rasupport.rasupportmain.modulesmanagement.RASupportModulesFactory;
 import java.io.File;
 import static java.lang.System.exit;
@@ -139,15 +141,25 @@ public class RASupportMain {
     * SELECTION METHODS     
     **************************************************************************/
     
+    // The resource aggregation module always receives a consistent query with an object of the sender
+    
     // For this method, the client must to create a query object
     public void executeQuery(RASupportQuery query) {
-        resourceAggregation.executeQuery(query);
+        
+        if(query.isConsistent()) {
+            resourceAggregation.executeQuery(query);
+        }        
     }
     
-    // For this method, the resource aggregation module parses the XML file
+    // For this method, parses the XML file and hides this complexity to the client
     public void executeQuery(File queryFile) {
         
+        // Creates a query object taking into account the specified query file
+        XMLQueryReader qw = new XMLQueryReader(queryFile.getAbsolutePath(), node.getTopologyNode());
+        RASupportQuery query = qw.getQuery();
         
-        resourceAggregation.executeQuery(queryFile);
+        if(query.isConsistent()) {
+            resourceAggregation.executeQuery(query);
+        }
     }
 }

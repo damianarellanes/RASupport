@@ -13,11 +13,17 @@ public interface RASupportReceiver {
     // For any scenario
     public void receiveObject(Object receivedObject, RASupportActions action);
     
+    // For any scenario
+    public void receiveObject(Object receivedObject, RASupportTopologyNode sender, RASupportActions action);
+    
     // For real scenarios    
     public void receiveXML();
     
     // For simulated scenarios
     public void simulateReceiveXML(File rsFile, String aliasSender, RASupportActions action);
+    
+    // For any scenario (sync message). Used commonly for acknowledges
+    public RASupportActions receiveSyncMessage(String message, RASupportTopologyNode sender, RASupportActions action);
     
     // For any scenario (real or simulation)
     public void receiveMessage(String message, RASupportTopologyNode sender, RASupportActions action);
