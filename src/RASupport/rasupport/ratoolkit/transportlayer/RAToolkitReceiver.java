@@ -49,9 +49,9 @@ public class RAToolkitReceiver implements RASupportReceiver {
         else if(action.equals(REQUEST_QUERY)) {
             selectionAPI.selectResources((RASupportQuery) receivedObject);
         }
-        /*else if(QUERY_AGENT_FINISHED) {
-            //
-        }*/
+        else if(action.equals(QUERY_AGENT_FINISHED)) {
+            selectionAPI.receiveQueryAgentResults((QueryAgent) receivedObject);
+        }
     }
     
     @Override

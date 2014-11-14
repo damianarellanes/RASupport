@@ -1,2 +1,3 @@
 # To ignore .db files
 *.db
+/dist/

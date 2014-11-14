@@ -3,47 +3,109 @@ package RASupport.rasupport.ratoolkit.selectionapi.agents;
 import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
 import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportActions;
 import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
+import RASupport.rasupport.rasupportconfig.queries.RASupportQueryGroup;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
 import RASupport.rasupport.ratoolkit.common.Agent;
 import RASupport.rasupport.ratoolkit.common.RAToolkitConfigParser;
+import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
+import static RASupport.rasupport.ratoolkit.selectionapi.agents.QueryEvaluator.evaluateSuperpeer;
+import RASupport.rasupport.ratoolkit.selectionapi.protocols.ProtocolContext;
 import RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages;
 import static RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages.*;
 import RASupport.rasupport.ratoolkit.transportlayer.RAToolkitSender;
-import myconet.HyphaLink;
+import java.util.Map;
 import myconet.MycoNode;
 
 /**
  * SelectionAPI: representation of a query agent
+ * Finish its task whenthe ttl expires (ttl=0) or when it can't reach a neighbor from the visited super-peer
  * @author Damian Arellanes
  */
 public class QueryAgent implements Agent {
     
-    int ttl = 0;
+    private String agentId =  "";
+    private int ttl;
+    private ProtocolContext protocolContext = null;
+    private QueryAgentsWaiter waiter = null;
     
     private RASupportQuery query = null;
-    MycoNode spInitiator = null;
-    String spInitiatorAlias = "";
-    //QueryAgentsBehaviour selectedProtocol;
-    RASupportMap<MycoNode, MycoNode> exclusionList = null; // Exclusion list to avoid query duplicates in super-peers
+    private MycoNode spInitiator = null;
+    private String spInitiatorAlias = "";
+    private boolean hasFinished ;
     
+    private RASupportMap<MycoNode, MycoNode> exclusionList = null; // Exclusion list to avoid query duplicates in super-peers
+    private RASupportMap<MycoNode, QueryAgentResult> resultSet = null;
+    private Map<RASupportQueryGroup, String> sqlQueries = null;
     
-    public QueryAgent(RASupportQuery query, MycoNode peerOwner, int ttl) {
+    public QueryAgent(RASupportQuery query, MycoNode peerOwner, int ttl, String agentId, ProtocolContext protocolContext, 
+            QueryAgentsWaiter waiter) {
+        
+        this.agentId = agentId;
+        this.protocolContext = protocolContext;
         
         this.query = query;
         this.spInitiator = peerOwner;
         this.spInitiatorAlias = peerOwner.getAlias();
         this.exclusionList = new RASupportMap<>();
+        this.resultSet = new RASupportMap<>();
+        this.sqlQueries = QueryEvaluator.buildSqlQueriesPerGroup(query);
+        
         this.ttl = ttl;
         
-        this.exclusionList.put(peerOwner, peerOwner); // The peerOwner has been visited because is SP_initiator        
+        this.waiter = waiter;
+        this.hasFinished = false;
     }
     
-    public void performSelectionIn(MycoNode spVisited) {
+    // Constructor for prototypes
+    public QueryAgent(QueryAgent queryAgentPrototype) {
         
-        // Adds spVisited to the exclusion list
-        exclusionList.put(spVisited, spVisited);
+        this.agentId = queryAgentPrototype.getAgentId();
+        this.protocolContext = queryAgentPrototype.getProtocolContext();
         
-        performProtocol(spVisited);
+        this.query = queryAgentPrototype.getQuery();
+        this.spInitiator = queryAgentPrototype.getSpInitiator();
+        this.spInitiatorAlias = spInitiator.getAlias();
+        this.exclusionList = queryAgentPrototype.getExclusionList();
+        this.resultSet = queryAgentPrototype.getResultSet();
+        this.sqlQueries = queryAgentPrototype.getSqlQueries();
+        
+        this.ttl = queryAgentPrototype.getTtl();        
+        
+        this.waiter = queryAgentPrototype.getWaiter();
+        this.hasFinished = queryAgentPrototype.hasFinished();
+    }
+    
+    public void behaveIn(MycoNode spVisited, DatabaseManager dbMan) {
+        
+        // Selects resources in spVisited
+        QueryAgentResult result = QueryEvaluator.evaluateSuperpeer(query, dbMan, spVisited, sqlQueries);        
+        
+        // Add result iff result != emptySet (i.e., iff result cpntains something)
+        if(!result.isEmpty()) {
+            resultSet.put(spVisited, result);
+        }
+        
+        // If ttl expires, so the query agent returns to super-peer initiator
+        if(--ttl == 0) {
+            
+            System.err.println(agentId + " has expired in " + spVisited.getAlias());
+                        
+            returnToSpInitiator();
+        }
+        else {
+            
+            // Adds spVisited to the exclusion list
+            getExclusionList().put(spVisited, spVisited);
+
+            // Performs selected protocol (flooding or iRandomWalks)
+            getProtocolContext().executeProtocol(this, spVisited);
+        }              
+    }
+    
+    public void returnToSpInitiator() {
+        
+        hasFinished = true;        
+        RAToolkitSender.sendObject(this, spInitiator, QUERY_AGENT_FINISHED); 
     }
     
 
@@ -53,67 +115,57 @@ public class QueryAgent implements Agent {
     }
 
     @Override
-    public void sendTo(RASupportTopologyNode receiver) {  
+    public boolean sendTo(RASupportTopologyNode receiver) {  
         
-        testSuperpeer((MycoNode) receiver);
-    }        
-    
-    public void performProtocol(MycoNode spVisited) {
-        
-        HyphaLink link = spVisited.getHyphaLink();
-        int neighborCount = link.getHyphae().size();
-        
-        // If there are neighbors
-        // Floods the neighborhood of spVisited with query agents
-        if(neighborCount > 0) {
-                        
-            for(MycoNode neighbor: link.getHyphae()) {
-                
-                sendTo(neighbor);
-            }            
+        // Only test if the query agent still active
+        if(!hasFinished) {
+            return testSuperpeer((MycoNode) receiver);
         }
-        else {
-            // Finish its task
-        }
+        return false;
     }
     
-    private void returnToInitiator() {
-        RAToolkitSender.sendObject(this, spInitiator, QUERY_AGENT_FINISHED);
+    public void notifyArrival() {
+        
+        waiter.notifyQueryAgentArrival(this);
     }
     
     // Algorithm 4 from selection phase
-    private void testSuperpeer(MycoNode sp) {
+    // Returns true on sending success
+    private boolean testSuperpeer(MycoNode sp) {
         
-        if(exclusionList.size() <= RAToolkitConfigParser.raToolkit_maxExclusion) {
+        if(getExclusionList().size() <= RAToolkitConfigParser.raToolkit_maxExclusion) {
             
             // If sp doesn't exists in the exclusion list
             if(!exclusionList.containsKey(sp)) {
-                sendTestMessageTo(sp);
+                return sendTestMessageTo(sp);
             }
             else {
-                // return to SP_initiator
+                System.err.println("SUPER-PEER " + sp.getAlias() + " REJECTS(exclusion list) " + agentId);
+                return false;
             }
         }
         else {
             
             // If the exclusion list is bigger than the limit, don't search on it and only send a test message
-            sendTestMessageTo(sp);            
+            return sendTestMessageTo(sp);            
         }
     }
     
-    // Algorithm 5 from selection phase
-    private void sendTestMessageTo(MycoNode sp) {
-        
-        RASupportActions ack = RAToolkitSender.sendSyncMessage(String.valueOf(getQuery().getQueryId()), spInitiator, sp, TEST_QUERY);
-        
+    // Algorithm 5 from the selection phase
+    // Returns true on sending success
+    private boolean sendTestMessageTo(MycoNode sp) {
+                
+        RASupportActions ack = RAToolkitSender.sendSyncMessage(String.valueOf(getQuery().getQueryId()), getSpInitiator(), sp, TEST_QUERY);
+
         if(ack.equals(RAToolkitMessages.NO_RECEIVED_QUERY)) {
-            
-            // Visits SP
-            // Query agents die when its ttl expires
-            if(--ttl > 0) {
-                RAToolkitSender.sendObject(this, sp, VISIT_SP); 
-            }
+
+            RAToolkitSender.sendObject(this, sp, VISIT_SP); 
+            return true;
         }
+        else {
+            System.err.println("SUPER-PEER " + sp.getAlias() + " REJECTS(exclusion list) " + agentId);
+            return false;
+        }                        
     }
 
     /**
@@ -121,6 +173,69 @@ public class QueryAgent implements Agent {
      */
     public RASupportQuery getQuery() {
         return query;
+    }
+
+    /**
+     * @return the agentId
+     */
+    public String getAgentId() {
+        return agentId;
+    }
+
+    /**
+     * @return the ttl
+     */
+    public int getTtl() {
+        return ttl;
+    }
+
+    /**
+     * @return the spInitiator
+     */
+    public MycoNode getSpInitiator() {
+        return spInitiator;
+    }
+
+    /**
+     * @return the protocolContext
+     */
+    public ProtocolContext getProtocolContext() {
+        return protocolContext;
+    }
+
+    /**
+     * @return the exclusionList
+     */
+    public RASupportMap<MycoNode, MycoNode> getExclusionList() {
+        return exclusionList;
+    }
+
+    /**
+     * @return the waiter
+     */
+    public QueryAgentsWaiter getWaiter() {
+        return waiter;
+    }
+
+    /**
+     * @return the hasFinished
+     */
+    public boolean hasFinished() {
+        return hasFinished;
+    }
+
+    /**
+     * @return the resultSet
+     */
+    public RASupportMap<MycoNode, QueryAgentResult> getResultSet() {
+        return resultSet;
+    }
+
+    /**
+     * @return the sqlQueries
+     */
+    public Map<RASupportQueryGroup, String> getSqlQueries() {
+        return sqlQueries;
     }
 
 }

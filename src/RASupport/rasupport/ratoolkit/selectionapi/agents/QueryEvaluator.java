@@ -1,12 +1,13 @@
 package RASupport.rasupport.ratoolkit.selectionapi.agents;
 
-import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
-import RASupport.rasupport.rasupportconfig.queries.RASupportQueryGroup;
-import RASupport.rasupport.rasupportconfig.queries.RASupportQueryRequirement;
+import RASupport.rasupport.rasupportconfig.queries.*;
 import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import myconet.MycoNode;
 
 /**
  * RAToolkit: evaluates a query in the super-peer visited
@@ -14,64 +15,85 @@ import java.util.ArrayList;
  */
 public class QueryEvaluator {
     
-    // Performs selection locally
-    public static void evaluateSPvisited(RASupportQuery query, DatabaseManager dbMan) {
+    // Returns a map (group, sqlQuery) of a sql query representation for each group specified in the query
+    public static Map<RASupportQueryGroup, String> buildSqlQueriesPerGroup(RASupportQuery query) {
         
-        ArrayList<ArrayList> candidates = new ArrayList<>();
+        Map<RASupportQueryGroup, String> sqlQueries = new HashMap<>();
         
         String nameColumn = "nameAttribute";
         String valueColumn = "valueAttribute";
         String castNumerical = " AND CAST(valueAttribute AS DOUBLE) BETWEEN ";
         String castString = " AND valueAttribute=";
-        String groupBy = "GROUP BY idPeer HAVING count(*)=";
-        String selectPrefix = "SELECT idPeer, COUNT(*) as count FROM Attributes WHERE ";
+        String groupBy = "GROUP BY a.idPeer HAVING count(*)=";
+        //String selectPrefix = "SELECT idPeer, COUNT(*) as count FROM Attributes WHERE ";
+        String selectPrefix = "SELECT namePeer, COUNT(*) as count FROM Attributes a JOIN Peers p WHERE a.idPeer = p.idPeer AND ";
         StringBuilder select;
                 
         for(RASupportQueryGroup group: query.getGroups().values()) {                        
             
-            try {
-                int count = 0;
-                int size = group.getAttributes().size();
-                select = new StringBuilder(selectPrefix);
-                for(RASupportQueryRequirement attribute: group.getAttributes().values()) {
-                    
-                    select.append("(" + nameColumn + "='" + attribute.getAttribute() + "'");
-                    if(attribute.isNumerical()) {
-                                            
-                        select.append(castNumerical + attribute.getMin_val() + " AND " + attribute.getMax_val() + ")");
-                    }
-                    else {
-                        select.append(castString + "'" + attribute.getValue() + "'" + ")");
-                    }
-                    select.append("\n");
-                    
-                    if(count != size -1) {
-                        select.append(" OR ");
-                    }
-                    
-                    count++;
-                    
-                }
-                
-                select.append(groupBy + count);                
-                
-                System.out.println("GROUP " + group.getName() +":");
-                System.out.println(select.toString());
-                
-                ResultSet peers = dbMan.executeQuery(select.toString());
-                
-                ArrayList tmp = new ArrayList<>();
-                while(peers.next()) {
-                    tmp.add(peers.getString("idPeer"));
-                }
-                candidates.add(tmp);
-            }
-            catch (SQLException ex) {
-                
-            }
+            int count = 0;
+            int size = group.getAttributes().size();
+            select = new StringBuilder(selectPrefix);
             
-            System.out.println(candidates);
+            select.append("(");
+            for(RASupportQueryRequirement attribute: group.getAttributes().values()) {
+
+                select.append("(" + nameColumn + "='" + attribute.getAttribute() + "'");
+                if(attribute.isNumerical()) {
+
+                    select.append(castNumerical + attribute.getMin_val() + " AND " + attribute.getMax_val() + ")");
+                }
+                else {
+                    select.append(castString + "'" + attribute.getValue() + "'" + ")");
+                }
+                select.append("\n");
+
+                if(count != size -1) {
+                    select.append(" OR ");
+                }
+
+                count++;
+            }
+            select.append(")");
+
+            select.append(groupBy + count);             
+                        
+            sqlQueries.put(group, select.toString());
         }
+        
+        return sqlQueries;
+    }
+    
+    // Performs selection locally
+    public static QueryAgentResult evaluateSuperpeer(RASupportQuery query, DatabaseManager dbMan, MycoNode spVisited, 
+            Map<RASupportQueryGroup, String> sqlQueries) {
+        
+        QueryAgentResult result = new QueryAgentResult(spVisited);
+                
+        for(RASupportQueryGroup group: query.getGroups().values()) {                        
+            
+            try {
+                
+                System.out.println("GROUP " + group.getName() +":");                
+                
+                ResultSet resultForGroup = dbMan.executeQuery(sqlQueries.get(group));
+                
+                ArrayList candidatePeers = new ArrayList<>();
+                while(resultForGroup.next()) {
+                    candidatePeers.add(resultForGroup.getString("namePeer"));
+                }
+                
+                // Only adds the group to CGv if there are candidate peers
+                if(!candidatePeers.isEmpty()) {
+                    result.put(group, candidatePeers);                
+                }                
+            }
+            catch (SQLException ex) {}
+            
+            //System.out.println(candidates);
+        }
+        
+        return result;
     }
     
     private static void evaluateNormalPeer(RASupportQueryGroup group, ResultSet normalPeers, DatabaseManager dbMan) {

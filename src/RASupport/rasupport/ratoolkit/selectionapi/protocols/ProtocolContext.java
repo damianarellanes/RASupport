@@ -2,7 +2,8 @@ package RASupport.rasupport.ratoolkit.selectionapi.protocols;
 
 import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
 import RASupport.rasupport.rasupportconfig.queries.RASupportQueryOptions;
-import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
+import RASupport.rasupport.ratoolkit.selectionapi.agents.QueryAgent;
+import RASupport.rasupport.ratoolkit.selectionapi.agents.QueryAgentsWaiter;
 import static RASupport.rasupport.ratoolkit.selectionapi.protocols.QueryAgentsBehaviour.*;
 import myconet.MycoNode;
 
@@ -16,26 +17,27 @@ public class ProtocolContext {
     private Flooding floodingProtocol = null; 
     private IRandomWalk iRandomWalkProtocol = null;
     
-    public ProtocolContext(MycoNode peerOwner, DatabaseManager dbMan) {
-        floodingProtocol  = new Flooding(peerOwner, dbMan);
+    public ProtocolContext(MycoNode peerOwner) {
+        floodingProtocol  = new Flooding();
         iRandomWalkProtocol = new IRandomWalk(peerOwner);
     }
     
-    public void executeProtocol(RASupportQuery query) {
+    public void executeProtocol(QueryAgent queryAgent, MycoNode spVisited) {
         
         // Performs a strategy depending on the selected protocol
-        switch(getSelectedProtocol(query.getOption())) {
+        switch(getSelectedProtocol(queryAgent.getQuery().getOption())) {
             case FLOODING:
-                floodingProtocol.execute(query);
+                floodingProtocol.execute(queryAgent, spVisited);
                 break;
             case IRANDOMWALK:
-                iRandomWalkProtocol.execute(query);
+                //iRandomWalkProtocol.execute(query);
                 break;    
             default:
-                iRandomWalkProtocol.execute(query);
+                //iRandomWalkProtocol.execute(query);
                 break;
         }
     }
+    
     
     private QueryAgentsBehaviour getSelectedProtocol(RASupportQueryOptions option) {
         

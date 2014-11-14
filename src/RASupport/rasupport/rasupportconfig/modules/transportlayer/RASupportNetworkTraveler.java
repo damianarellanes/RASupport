@@ -16,6 +16,6 @@ public interface RASupportNetworkTraveler {
     
     public String getSender();
     
-    public void sendTo(RASupportTopologyNode receiver);
+    public boolean sendTo(RASupportTopologyNode receiver);
     
 }

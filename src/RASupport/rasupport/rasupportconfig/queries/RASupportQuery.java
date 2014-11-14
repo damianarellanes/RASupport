@@ -5,6 +5,8 @@ import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
 import RASupport.rasupport.rasupportconfig.xml.XMLQueryWriter;
 import java.io.File;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * RASupport: representation of a query in RASupport
@@ -187,7 +189,10 @@ public class RASupportQuery {
     // In particular, RAToolkit use: query_hash_code + peerAlias_hash_code + queryAgent_hash_code
     private void computeQueryCode() {
         
-        queryId = (toString() + requestor.toString()).hashCode();
+        Date date= new java.util.Date();
+        Timestamp timestamp = new Timestamp(date.getTime());
+        
+        queryId = (toString() + requestor.toString() + timestamp).hashCode();
     }
 
     /**

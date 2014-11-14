@@ -5,12 +5,12 @@
         <group>
             <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/SelectionManager.java</file>
             <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/SelectionAPI.java</file>
-            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/transportlayer/RAToolkitReceiver.java</file>
             <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/rasupportmain/RASupportMain.java</file>
-            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/transportlayer/RAToolkitMessages.java</file>
+            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/QueryEvaluator.java</file>
             <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/protocols/Flooding.java</file>
             <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/QueryAgent.java</file>
             <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/QueryAgentsWaiter.java</file>
+            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/QueryAgentResult.java</file>
         </group>
     </open-files>
 </project-private>

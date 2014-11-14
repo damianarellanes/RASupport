@@ -38,8 +38,10 @@ public class AdvertisementAgentUpdating implements Agent {
     }
 
     @Override
-    public void sendTo(RASupportTopologyNode receiver) {
+    public boolean sendTo(RASupportTopologyNode receiver) {
         RAToolkitSender.sendObject(this, receiver, UPDATE_ATTRIBUTE); 
+        
+        return true;
     }
 
     /**

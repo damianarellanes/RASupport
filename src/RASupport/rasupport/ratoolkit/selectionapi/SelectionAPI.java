@@ -58,7 +58,7 @@ public class SelectionAPI implements RAToolkitSelectionAPI {
     @Override
     public RASupportActions testQuery(long idQuery) {
         
-        if(selectionManager.hasReceivedQuery(idQuery)) {
+        if(selectionManager.hasReceivedQueryAgent(idQuery)) {
             
             return RECEIVED_QUERY;
         }
@@ -70,11 +70,23 @@ public class SelectionAPI implements RAToolkitSelectionAPI {
     @Override
     public void receiveQueryAgent(QueryAgent queryAgent) {
         
-        logMessage("SUPER-PEER " + myconetAlias + " has received a query agent with the query " + 
+        long receivedQuery = queryAgent.getQuery().getQueryId();
+        
+        logMessage("SUPER-PEER " + myconetAlias + " has received " + queryAgent.getAgentId() +  " with the query " + 
+                receivedQuery);
+        
+        selectionManager.addQueryAgent(receivedQuery);
+        queryAgent.behaveIn(myconetPeer, databaseManager);
+        
+    }
+    
+    @Override
+    public void receiveQueryAgentResults(QueryAgent queryAgent) {
+        
+        logMessage("SUPER-PEER " + myconetAlias + " has received a result set from " + queryAgent.getAgentId() +  " for the query " + 
                 queryAgent.getQuery().getQueryId());
         
-        queryAgent.performSelectionIn(myconetPeer);
-        
+        selectionManager.receiveQueryAgentResults(queryAgent);
     }
     
 }

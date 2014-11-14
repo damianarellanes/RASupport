@@ -1,7 +1,10 @@
 package RASupport.rasupport.ratoolkit.selectionapi.agents;
 
 import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
-import myconet.HyphaLink;
+import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
+import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
+import RASupport.rasupport.ratoolkit.selectionapi.protocols.ProtocolContext;
+import java.util.Map;
 import myconet.MycoNode;
 
 /**
@@ -11,53 +14,76 @@ import myconet.MycoNode;
  * Lives in SP_initiator
  * @author Damian Arellanes
  */
-public class QueryAgentsWaiter extends Thread {
+public class QueryAgentsWaiter implements Runnable {
     
-    private MycoNode peerOwner = null;
+    protected Thread thread; 
+    
+    private MycoNode spInitiator = null;
     private RASupportQuery query = null;
+    private ProtocolContext protocolContext = null;
+    private DatabaseManager dbMan = null;
     
-    private int queryAgentsToWait;
-    private volatile int receivedAgents;
+    /*private int queryAgentsToWait;
+    private volatile int receivedAgents;*/
     
-    public QueryAgentsWaiter(RASupportQuery query, MycoNode peerOwner) {
+    private RASupportMap<MycoNode, QueryAgentResult> queryResult = null; // (superPeer, queryResult)
+    
+    public QueryAgentsWaiter(RASupportQuery query, MycoNode spInitiator,  ProtocolContext protocolContext, 
+            DatabaseManager dbMan) {
         
         this.query = query;
-        this.peerOwner = peerOwner;
+        this.spInitiator = spInitiator;
+
+        /*this.queryAgentsToWait = 0;
+        this.receivedAgents = 0;*/
         
-        this.queryAgentsToWait = 0;
-        this.receivedAgents = 0;
+        this.protocolContext = protocolContext;        
+        this.dbMan = dbMan;
+        
+        this.queryResult = new RASupportMap<>();
+    }
+    
+    public void start() {
+        
+        if (thread == null) {
+            thread = new Thread (this);
+            thread.start ();
+        } 
     }
     
     @Override
     public void run() {
         
-        HyphaLink link = peerOwner.getHyphaLink();
-        int neighborCount = link.getHyphae().size();
+        QueryAgent queryAgentPrototype = new QueryAgent(
+                query, spInitiator, query.getTtl(), "AgentXXX", protocolContext, this
+        );
         
-        // If there are neighbors
-        // Floods the neighborhood with query agents
-        if(neighborCount > 0) {
+        queryAgentPrototype.behaveIn(spInitiator, dbMan);
+        
+        // Is better to cretae a heuristic called timeout, in order to stop the process (only for flooding)
+        System.out.println("SP_initiator has received all query agents");
+        
+        for(Map.Entry<MycoNode, QueryAgentResult> entry: queryResult.entrySet()) {
             
-            queryAgentsToWait = neighborCount;
-            for(MycoNode neighbor: link.getHyphae()) {
-            
-                //System.out.println("Query sent to " + neighbor.getAlias());
-                new QueryAgent(query, peerOwner, query.getTtl()).sendTo(neighbor);
-            }
-            
+            System.out.println("-----------------------------------------------------------------------------");
+            System.out.println("SP_visited = " + entry.getKey().getAlias());
+            System.out.println("Candidate peers = " + entry.getValue());
+            System.out.println("-----------------------------------------------------------------------------");
         }
+        
     }
     
-    public synchronized void receiveQueryAgent(QueryAgent queryAgent) {
+    public synchronized void notifyQueryAgentArrival(QueryAgent queryAgent) {
         
-        receivedAgents++;
+        // Adds result
+        System.out.println("Adding result from query agent received...");
         
-        // Do something with the response
-        
-        // If SP_initiator has received response of all query agents 
-        if(receivedAgents == queryAgentsToWait) {
-            System.out.println("SP_initiator has received all query agents");
-        }
+        // Iterates though the result set
+	for (Map.Entry<MycoNode, QueryAgentResult> entry : queryAgent.getResultSet().entrySet()) {
+            
+            queryResult.putIfAbsent(entry.getKey(), entry.getValue());
+            //System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
+	}
     }
 
 }

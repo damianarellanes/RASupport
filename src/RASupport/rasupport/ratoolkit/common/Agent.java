@@ -5,13 +5,14 @@ import RASupport.rasupport.rasupportconfig.modules.transportlayer.RASupportNetwo
 
 /**
  * RAToolkit: representation of an agent in the toolkit
+ *
  * @author damianarellanes
  */
 public interface Agent extends RASupportNetworkTraveler {
-    
+
     @Override
     public String getSender();
-    
+
     @Override
-    public void sendTo(RASupportTopologyNode receiver);
+    public boolean sendTo(RASupportTopologyNode receiver);
 }

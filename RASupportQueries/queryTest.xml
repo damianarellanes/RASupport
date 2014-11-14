@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <query>
 	<option>requires:find_resources</option>
-	<ttl>4</ttl>
+	<ttl>10</ttl>
 	<group>
 		<name>Processing</name>
 		<num_nodes>8</num_nodes>

@@ -1,6 +1,7 @@
 package RASupport.rasupport.ratoolkit.selectionapi.protocols;
 
-import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
+import RASupport.rasupport.ratoolkit.selectionapi.agents.QueryAgent;
+import myconet.MycoNode;
 
 /**
  * RAToolkit: interface that must be implemented by selection protocols
@@ -8,6 +9,6 @@ import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
  */
 public interface SelectionProtocol {
     
-    public void execute(RASupportQuery query);
+    public void execute(QueryAgent queryAgent, MycoNode spVisited);
 
 }

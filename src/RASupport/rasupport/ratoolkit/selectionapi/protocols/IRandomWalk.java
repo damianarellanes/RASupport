@@ -8,7 +8,7 @@ import myconet.MycoNode;
  * RAToolkit: intelligent random walks protocol
  * @author Damian Arellanes
  */
-public class IRandomWalk implements SelectionProtocol {
+public class IRandomWalk /*implements SelectionProtocol*/ {
     
     MycoNode peerOwner = null;
     String peerAlias = "";
@@ -22,7 +22,7 @@ public class IRandomWalk implements SelectionProtocol {
         statisticList = new RASupportMap();        
     }
 
-    @Override
+    //@Override
     public void execute(RASupportQuery query) {
         
     }

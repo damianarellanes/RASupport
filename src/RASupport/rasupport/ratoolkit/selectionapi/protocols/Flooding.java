@@ -1,15 +1,8 @@
 package RASupport.rasupport.ratoolkit.selectionapi.protocols;
 
 import RASupport.rasupport.rasupportconfig.queries.*;
-import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
-import RASupport.rasupport.ratoolkit.selectionapi.agents.QueryEvaluator;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import RASupport.rasupport.ratoolkit.selectionapi.agents.QueryAgent;
+import RASupport.rasupport.ratoolkit.selectionapi.agents.QueryAgentsWaiter;
 import myconet.HyphaLink;
 import myconet.MycoNode;
 
@@ -22,51 +15,38 @@ import myconet.MycoNode;
  */
 public class Flooding implements SelectionProtocol {
     
-    MycoNode peerOwner = null;
-    String peerAlias = "";
-    
-    DatabaseManager dbMan = null;
-    
-    public Flooding(MycoNode peerOwner, DatabaseManager dbMan) {
-        
-        this.peerOwner = peerOwner;
-        this.peerAlias = peerOwner.getAlias();
-        
-        this.dbMan = dbMan;
-    }
+    public Flooding() {}
 
     @Override
-    public void execute(RASupportQuery query) {
+    public void execute(QueryAgent queryAgent, MycoNode spVisited) {
                 
-        HyphaLink link = peerOwner.getHyphaLink();
+        HyphaLink link = spVisited.getHyphaLink();
+        int neighborCount = link.getHyphae().size();
         
         // If there are neighbors
-        // Floods the neighborhood with query agents
-        if(link.neighborCount() > 0) {
-            for(MycoNode neighbor: link.getNeighbors()) {
-            
-                //new QueryAgent().sendTo(neighbor);
+        // Floods the neighborhood of spVisited with query agents
+        if(neighborCount > 0) {
+                  
+            int countSending = 0;
+            for(MycoNode neighbor: link.getHyphae()) {
+                
+                System.out.println("SP " + spVisited.getAlias() + " tries to send " + queryAgent.getAgentId()  +" to " + neighbor.getAlias());
+                
+                // Sends a clone to a specific neighbor using the query agent prototype
+                // Don't use clone because is slow
+               if(!new QueryAgent(queryAgent).sendTo(neighbor)) {
+                   countSending++;
+               }
             }
             
-        }        
-    }
-    
-    public void executeInInitiator(RASupportQuery query) {
-        
-        HyphaLink link = peerOwner.getHyphaLink();
-        
-        // If there are neighbors
-        // Floods the neighborhood with query agents
-        if(link.neighborCount() > 0) {
-            for(MycoNode neighbor: link.getNeighbors()) {
-            
-                //new QueryAgent().sendTo(neighbor);
+            // If the agent wasn't able to send any query agent
+            if(countSending == neighborCount) {
+                queryAgent.returnToSpInitiator();
             }
-            
+        }
+        else {
+            // If there aren't anymore neighbors to visit, finish the task of the query agent
+            queryAgent.returnToSpInitiator();
         }        
-        
-        QueryEvaluator.evaluateSPvisited(query, dbMan);
     }
-    
-
 }

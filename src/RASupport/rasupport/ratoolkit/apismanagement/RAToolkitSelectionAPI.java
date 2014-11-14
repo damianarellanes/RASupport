@@ -16,8 +16,10 @@ public interface RAToolkitSelectionAPI {
     
     public void selectResources(RASupportQuery query);
     
-    public RASupportActions testQuery(long idQuery); // Returns an acknowledge as reponse
+    public RASupportActions testQuery(long idQuery); // Returns an acknowledge as reponse (synchronous method)
     
     public void receiveQueryAgent(QueryAgent queryAgent);
+    
+    public void receiveQueryAgentResults(QueryAgent queryAgent);
     
 }

@@ -1,11 +1,9 @@
 package RASupport.rasupport.ratoolkit.selectionapi.agents;
 
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logMessage;
 import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
 import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
 import RASupport.rasupport.ratoolkit.selectionapi.protocols.*;
-import RASupport.rasupport.ratoolkit.selectionapi.protocols.QueryAgentsBehaviour;
 import static RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages.*;
 import RASupport.rasupport.ratoolkit.transportlayer.RAToolkitSender;
 import myconet.MycoNode;
@@ -22,11 +20,8 @@ public class SelectionManager {
     String peerAlias = "";
     DatabaseManager dbMan = null;
     
-    RASupportMap<Long, MycoNode> receivedQueries = null;// This could be maintained in the database (idQuery, peerSender) 
-    
-    ProtocolContext protocolContext;    
-    
-    RASupportMap<QueryAgentsWaiter, QueryAgentsWaiter> queriesSent = null;// Queries sent by the current peer (only used by super-peers)
+    RASupportMap<Long, Long> receivedQueryAgents = null;// This could be maintained in the database (idQuery, peerSender)     
+    ProtocolContext protocolContext = null;    
     
     public SelectionManager(MycoNode peerOwner, DatabaseManager dbMan) {
         
@@ -34,11 +29,11 @@ public class SelectionManager {
         this.peerAlias = peerOwner.getAlias();
         this.dbMan = dbMan;
         
-        this.receivedQueries = new RASupportMap<>();
+        this.receivedQueryAgents = new RASupportMap<>();
         
-        this.protocolContext = new ProtocolContext(peerOwner, dbMan);
+        this.protocolContext = new ProtocolContext(peerOwner);
         
-        this.queriesSent = new RASupportMap<>();
+        //this.queriesSent = new RASupportMap<>();
     }        
     
     /*// Sends queries in collaborative P2P systems that only request one query
@@ -57,24 +52,35 @@ public class SelectionManager {
         
         // If the current peer is a super-peer and the query has not been sent yet
         if(sp == null && !query.isTraveling()) {
-            
-            // In the protocols, we send query agents
-            //protocolContext.executeProtocol(query);        
-            QueryAgentsWaiter qaw = new QueryAgentsWaiter(query, peerOwner);
-            queriesSent.put(qaw, qaw);
+                        
             query.setIsTraveling(true);
             
-            qaw.run();
+            // Creates a query agents waiter (1 per request)
+            new QueryAgentsWaiter(query, peerOwner, protocolContext, dbMan).start();
+            
         }
         else {
-            // Sends the query to the super-peer
+            
+            // Sends the query to the super-peer until such a query arrives to a super-peer initiator
             RAToolkitSender.sendObject(query, sp, REQUEST_QUERY);            
         }
                                 
     }
     
-    public boolean hasReceivedQuery(long idQuery) {
-        return receivedQueries.containsKey(idQuery);
+    public void addQueryAgent(long idQuery) {
+        receivedQueryAgents.put(idQuery, idQuery);
+    }
+    
+    public boolean hasReceivedQueryAgent(long idQuery) {
+        return receivedQueryAgents.containsKey(idQuery);
+    }
+    
+    public void receiveQueryAgentResults(QueryAgent queryAgent) {
+        
+        // Processes the results from the query agent
+        
+        // Notifies the arrival of a query agent to the correct query agents waiter
+        queryAgent.notifyArrival();
     }
     
 }

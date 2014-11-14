@@ -18,8 +18,7 @@ public enum RASupportStaticAttributes implements RASupportAttributesInterface {
     // PROCESSING ATTRIBUTES    
     cpu_speed (FLOAT_ATTRIBUTE, PROCESSING, 500f, 5000f),           
     cores (INT_ATTRIBUTE, PROCESSING, 1, 8),
-    //os_name (STRING_ATTRIBUTE, PROCESSING, Arrays.asList("Windows", "Linux", "HP UX")),    
-    os_name (STRING_ATTRIBUTE, PROCESSING, Arrays.asList("Linux")),    
+    os_name (STRING_ATTRIBUTE, PROCESSING, Arrays.asList("Windows", "Linux", "HP UX")),        
     
     // STORAGE ATTRIBUTES    
     total_hdisk (FLOAT_ATTRIBUTE, STORAGE, 1000f, 1000000f),

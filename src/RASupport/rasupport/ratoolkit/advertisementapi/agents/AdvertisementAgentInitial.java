@@ -39,11 +39,13 @@ public class AdvertisementAgentInitial implements Agent {
     }
 
     @Override
-    public void sendTo(RASupportTopologyNode receiver) {
+    public boolean sendTo(RASupportTopologyNode receiver) {
         /*logMessage("sending initial advertisement agent from " + sender.getID() + 
                 " to " + receiver.getID());*/
         
         // Sends a initial RS (initialRSPath) from normal peer (sender) to its super-peer (receiver)                
-        RAToolkitSender.sendObject(this, receiver, CREATE_RS);         
+        RAToolkitSender.sendObject(this, receiver, CREATE_RS);
+        
+        return true;
     }
 }
