@@ -8,7 +8,6 @@ import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
 import RASupport.rasupport.ratoolkit.common.Agent;
 import RASupport.rasupport.ratoolkit.common.RAToolkitConfigParser;
 import RASupport.rasupport.ratoolkit.databasesmanagement.DatabaseManager;
-import static RASupport.rasupport.ratoolkit.selectionapi.agents.QueryEvaluator.evaluateSuperpeer;
 import RASupport.rasupport.ratoolkit.selectionapi.protocols.ProtocolContext;
 import RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages;
 import static RASupport.rasupport.ratoolkit.transportlayer.RAToolkitMessages.*;
@@ -18,7 +17,7 @@ import myconet.MycoNode;
 
 /**
  * SelectionAPI: representation of a query agent
- * Finish its task whenthe ttl expires (ttl=0) or when it can't reach a neighbor from the visited super-peer
+ * Finish its task when the ttl expires (ttl=0) or when it can't reach a neighbor from the visited super-peer
  * @author Damian Arellanes
  */
 public class QueryAgent implements Agent {
@@ -32,6 +31,7 @@ public class QueryAgent implements Agent {
     private MycoNode spInitiator = null;
     private String spInitiatorAlias = "";
     private boolean hasFinished ;
+    private String currentVisited = "";
     
     private RASupportMap<MycoNode, MycoNode> exclusionList = null; // Exclusion list to avoid query duplicates in super-peers
     private RASupportMap<MycoNode, QueryAgentResult> resultSet = null;
@@ -56,6 +56,27 @@ public class QueryAgent implements Agent {
         this.hasFinished = false;
     }
     
+    public QueryAgent(RASupportQuery query, MycoNode peerOwner, int ttl, String agentId, ProtocolContext protocolContext, 
+            QueryAgentsWaiter waiter, RASupportMap<MycoNode, MycoNode> exclusionList) {
+        
+        this.agentId = agentId;
+        this.protocolContext = protocolContext;
+        
+        this.query = query;
+        this.spInitiator = peerOwner;
+        this.spInitiatorAlias = peerOwner.getAlias();
+        this.exclusionList = new RASupportMap<>();
+        this.resultSet = new RASupportMap<>();
+        this.sqlQueries = QueryEvaluator.buildSqlQueriesPerGroup(query);
+        
+        this.ttl = ttl;
+        
+        this.waiter = waiter;
+        this.hasFinished = false;
+        
+        this.exclusionList = exclusionList;
+    }
+    
     // Constructor for prototypes
     public QueryAgent(QueryAgent queryAgentPrototype) {
         
@@ -70,6 +91,7 @@ public class QueryAgent implements Agent {
         this.sqlQueries = queryAgentPrototype.getSqlQueries();
         
         this.ttl = queryAgentPrototype.getTtl();        
+        this.currentVisited = queryAgentPrototype.getCurrentVisited();
         
         this.waiter = queryAgentPrototype.getWaiter();
         this.hasFinished = queryAgentPrototype.hasFinished();
@@ -80,7 +102,7 @@ public class QueryAgent implements Agent {
         // Selects resources in spVisited
         QueryAgentResult result = QueryEvaluator.evaluateSuperpeer(query, dbMan, spVisited, sqlQueries);        
         
-        // Add result iff result != emptySet (i.e., iff result cpntains something)
+        // Add result iff result != emptySet (i.e., iff result contains something)
         if(!result.isEmpty()) {
             resultSet.put(spVisited, result);
         }
@@ -119,6 +141,7 @@ public class QueryAgent implements Agent {
         
         // Only test if the query agent still active
         if(!hasFinished) {
+                        
             return testSuperpeer((MycoNode) receiver);
         }
         return false;
@@ -140,7 +163,7 @@ public class QueryAgent implements Agent {
                 return sendTestMessageTo(sp);
             }
             else {
-                System.err.println("SUPER-PEER " + sp.getAlias() + " REJECTS(exclusion list) " + agentId);
+                System.err.println("IMPOSSIBLE TO SEND TO SUPER-PEER " + sp.getAlias() + " -> exclusion list");
                 return false;
             }
         }
@@ -163,7 +186,7 @@ public class QueryAgent implements Agent {
             return true;
         }
         else {
-            System.err.println("SUPER-PEER " + sp.getAlias() + " REJECTS(exclusion list) " + agentId);
+            System.err.println("SUPER-PEER " + sp.getAlias() + " REJECTS(received in the past) " + agentId);
             return false;
         }                        
     }
@@ -236,6 +259,32 @@ public class QueryAgent implements Agent {
      */
     public Map<RASupportQueryGroup, String> getSqlQueries() {
         return sqlQueries;
+    }
+
+    /**
+     * @param exclusionList the exclusionList to set
+     */
+    public void setExclusionList(RASupportMap<MycoNode, MycoNode> exclusionList) {
+        this.exclusionList = exclusionList;
+    }
+    
+    // Union of exclusion lists
+    public void unionExclusionListWith(RASupportMap<MycoNode, MycoNode> exclusionList) {
+        this.exclusionList.putAll(exclusionList);
+    }
+
+    /**
+     * @param currentVisited the currentVisited to set
+     */
+    public void setCurrentVisited(String currentVisited) {
+        this.currentVisited = currentVisited;
+    }
+
+    /**
+     * @return the currentVisited
+     */
+    public String getCurrentVisited() {
+        return currentVisited;
     }
 
 }

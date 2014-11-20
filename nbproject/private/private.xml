@@ -3,14 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/SelectionManager.java</file>
-            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/SelectionAPI.java</file>
+            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/rasupportconfig/queries/RASupportQueryRequirement.java</file>
+            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/tests/IRandomWalkTest.java</file>
+            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/tests/SimilarityBenchmark.java</file>
             <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/rasupportmain/RASupportMain.java</file>
-            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/QueryEvaluator.java</file>
             <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/protocols/Flooding.java</file>
-            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/QueryAgent.java</file>
-            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/QueryAgentsWaiter.java</file>
-            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/agents/QueryAgentResult.java</file>
+            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/rasupportconfig/queries/RASupportQueryGroup.java</file>
+            <file>file:/home/damianarellanes/NetBeansProjects/RASupport/src/RASupport/rasupport/ratoolkit/selectionapi/protocols/IRandomWalk.java</file>
         </group>
     </open-files>
 </project-private>

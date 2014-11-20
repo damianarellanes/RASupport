@@ -72,7 +72,7 @@ public class SelectionAPI implements RAToolkitSelectionAPI {
         
         long receivedQuery = queryAgent.getQuery().getQueryId();
         
-        logMessage("SUPER-PEER " + myconetAlias + " has received " + queryAgent.getAgentId() +  " with the query " + 
+        logMessage("SUPER-PEER " + myconetAlias + " has received the query " + 
                 receivedQuery);
         
         selectionManager.addQueryAgent(receivedQuery);
@@ -83,7 +83,7 @@ public class SelectionAPI implements RAToolkitSelectionAPI {
     @Override
     public void receiveQueryAgentResults(QueryAgent queryAgent) {
         
-        logMessage("SUPER-PEER " + myconetAlias + " has received a result set from " + queryAgent.getAgentId() +  " for the query " + 
+        logMessage("SUPER-PEER " + myconetAlias + " has received a result set for the query " + 
                 queryAgent.getQuery().getQueryId());
         
         selectionManager.receiveQueryAgentResults(queryAgent);

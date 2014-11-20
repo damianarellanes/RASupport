@@ -14,6 +14,10 @@ public class RAToolkitConfigParser {
     public static final String raToolkit_maxExclusion_tag = "ratoolkit.max_exclusion";
     public static int raToolkit_maxExclusion = 0; // Zero is the default value
     
+    // Number of neighbors to send query agentes from Sp_initiator using iRandomWalks
+    public static final String raToolkit_maxRW_tag = "ratoolkit.max_rw";
+    public static int raToolkit_maxRW = 1; // One is the default value, in order to send to at least one neighbor
+    
     static {
         loadRAToolkitConfiguration();
     }
@@ -41,7 +45,30 @@ public class RAToolkitConfigParser {
             } catch (NumberFormatException | NullPointerException e) {            
                 raToolkit_maxExclusion = 0;
             }
-        } 
+        }
+        
+        /*------------------------------------------------------------------------------------------------*/
+        // Maximum number of neighbors to send query agents from Sp_initiator using iRandomWalks: ratoolkit.initialN
+        /*------------------------------------------------------------------------------------------------*/
+        if(configuration.containsKey(raToolkit_maxRW_tag)) {
+                     
+            try {
+                raToolkit_maxRW = Integer.valueOf(
+                        configuration.getProperty(raToolkit_maxRW_tag));
+
+                if(raToolkit_maxRW < 0 || raToolkit_maxRW > Integer.MAX_VALUE) {
+                    logError("max exclusion value must be in the interval [0,MAX_VALUE=" + Integer.MAX_VALUE +"]");
+                    
+                    raToolkit_maxRW = 1;
+                }
+                else {
+                    logMessage("ratoolkit.max_rw found: " + raToolkit_maxRW);                            
+                }
+
+            } catch (NumberFormatException | NullPointerException e) {            
+                raToolkit_maxRW = 1;
+            }
+        }
         
     }
 

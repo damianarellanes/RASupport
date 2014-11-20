@@ -8,10 +8,9 @@
 		<cpu_speed>500.0,2500.0,4096.0,5000.0,0.2</cpu_speed>
 		<free_mem>10.0,1024.0,4096.0,16000.0,0.05</free_mem>
 		<free_hdisk>0.0,60.5,92.5,1000000.0,0.05</free_hdisk>
-		<rest_betw_nodes>
-			<latency>10.2,22.1,30.0,50.0,0.02</latency>
-			<bandwidth>10.2,22.1,30.0,50.0,0.02</bandwidth>
-		</rest_betw_nodes>
+		<cores>1,2,4,8,0.03</cores>
+		<busy_cpu>0.0,0.0,30.0,100.0,0.05</busy_cpu>
+		<os_name>Windows,0.0</os_name>
 	</group>
 	<!--<group>
 		<name>Display</name>
@@ -20,6 +19,16 @@
 		<refresh_rate>40,60,120,120,0.05</refresh_rate>
 		<bit_depth>8,16,48,48,0.0</bit_depth>
 		<screen_width>800,1024,1366,2560,0.02</screen_width>
+	</group>
+	<group>
+		<name>Processing2</name>
+		<num_nodes>8</num_nodes>
+		<cpu_speed>500.0,2500.0,4096.0,5000.0,0.2</cpu_speed>
+		<free_mem>10.0,1024.0,4096.0,16000.0,0.05</free_mem>
+		<free_hdisk>0.0,60.5,92.5,1000000.0,0.05</free_hdisk>
+		<cores>1,2,4,8,0.03</cores>
+		<busy_cpu>0.0,0.0,30.0,100.0,0.05</busy_cpu>
+		<os_name>Linux,0.0</os_name>
 	</group>-->
 	<rest_betw_groups>
 		<group_names>Processing,Display</group_names>

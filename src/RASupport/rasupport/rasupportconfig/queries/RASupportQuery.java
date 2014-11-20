@@ -4,7 +4,11 @@ import static RASupport.rasupport.rasupportconfig.log.LogManager.*;
 import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
 import RASupport.rasupport.rasupportconfig.xml.XMLQueryWriter;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -15,6 +19,7 @@ import java.util.Date;
 public class RASupportQuery {
     
     File queryFile = null;
+    private String content = "";
     
     private RASupportQueryOptions option = null;
     private int ttl = 0;    
@@ -164,6 +169,8 @@ public class RASupportQuery {
         qw.finishXMLQuery();
         
         queryFile = qw.getXMLQueryFile();
+        
+        content = createQueryContent(queryFile.getAbsolutePath());
                 
     }
     
@@ -193,6 +200,34 @@ public class RASupportQuery {
         Timestamp timestamp = new Timestamp(date.getTime());
         
         queryId = (toString() + requestor.toString() + timestamp).hashCode();
+    }
+    
+    private String createQueryContent(String filePath) {
+        
+        BufferedReader br = null;
+        try {
+            
+            String lineSep = System.getProperty("line.separator");
+            br = new BufferedReader(new FileReader(filePath));
+            String nextLine = "";
+            StringBuffer sb = new StringBuffer();
+            while ((nextLine = br.readLine()) != null) {
+                sb.append(nextLine);
+                sb.append(lineSep);
+            }   
+            
+            return sb.toString();
+            
+        } 
+        catch (FileNotFoundException  e) {} 
+        catch (IOException e2) {} 
+        finally {
+            try {
+                br.close();
+            } catch (IOException ex) {}
+        }
+        
+        return "";
     }
 
     /**
@@ -292,6 +327,13 @@ public class RASupportQuery {
      */
     public void setIsTraveling(boolean isTraveling) {
         this.isTraveling = isTraveling;
+    }
+
+    /**
+     * @return the content
+     */
+    public String getContent() {
+        return content;
     }
 
 }

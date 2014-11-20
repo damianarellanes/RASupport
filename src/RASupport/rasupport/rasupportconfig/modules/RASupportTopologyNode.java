@@ -17,4 +17,6 @@ public interface RASupportTopologyNode {
     
     public RASupportMain getRASupport();
     
+    public boolean isSuperpeer();
+    
 }

@@ -9,18 +9,10 @@
 		<free_mem>10.0,1024.0,4096.0,16000.0,0.05</free_mem>
 		<free_hdisk>0.0,60.5,92.5,1000000.0,0.05</free_hdisk>
 		<rest_betw_nodes>
-			<latency>10.2,22.1,30.0,50.0,0.02</latency>
-			<bandwidth>10.2,22.1,30.0,50.0,0.02</bandwidth>
+			<bandwidth>10.199999809265137,22.100000381469727,30.0,50.0,0.02</bandwidth>
+			<latency>10.199999809265137,22.100000381469727,30.0,50.0,0.02</latency>
 		</rest_betw_nodes>
 	</group>
-	<!--<group>
-		<name>Display</name>
-		<num_nodes>1</num_nodes>
-		<screen_height>600,1024,2048,1700,0.02</screen_height>
-		<refresh_rate>40,60,120,120,0.05</refresh_rate>
-		<bit_depth>8,16,48,48,0.0</bit_depth>
-		<screen_width>800,1024,1366,2560,0.02</screen_width>
-	</group>-->
 	<rest_betw_groups>
 		<group_names>Processing,Display</group_names>
 		<latency>0.0,0.0,50.0,100.0,0.2</latency>

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <query>
-	<option>requires:find_resources</option>
+	<option>requires:performance</option>
 	<ttl>10</ttl>
 	<group>
 		<name>Processing</name>

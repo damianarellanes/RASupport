@@ -60,7 +60,9 @@ public class QueryAgentsWaiter implements Runnable {
         
         queryAgentPrototype.behaveIn(spInitiator, dbMan);
         
-        // Is better to cretae a heuristic called timeout, in order to stop the process (only for flooding)
+        // waitResults();
+        
+        // Is better to create a heuristic called timeout, in order to stop the process (only for flooding)
         System.out.println("SP_initiator has received all query agents");
         
         for(Map.Entry<MycoNode, QueryAgentResult> entry: queryResult.entrySet()) {
@@ -84,6 +86,8 @@ public class QueryAgentsWaiter implements Runnable {
             queryResult.putIfAbsent(entry.getKey(), entry.getValue());
             //System.out.println("Key : " + entry.getKey() + " Value : " + entry.getValue());
 	}
+        
+        protocolContext.processResults(queryAgent);
     }
 
 }

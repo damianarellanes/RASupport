@@ -12,7 +12,7 @@ import myconet.MycoNode;
  * Candidate groups (group, array of peer identifiers)
  * @author Damian Arellanes
  */
-public class QueryAgentResult extends RASupportMap<RASupportQueryGroup, ArrayList<Long>> {
+public class QueryAgentResult extends RASupportMap<RASupportQueryGroup, ArrayList<MycoNode>> {
     
     private MycoNode spVisited = null;    
     
@@ -25,7 +25,7 @@ public class QueryAgentResult extends RASupportMap<RASupportQueryGroup, ArrayLis
     public String toString() {
         
         StringBuilder sb = new StringBuilder();
-        for(Map.Entry<RASupportQueryGroup, ArrayList<Long>> entry: this.entrySet()) {
+        for(Map.Entry<RASupportQueryGroup, ArrayList<MycoNode>> entry: this.entrySet()) {
             
             sb.append("Group: " + entry.getKey().getName() + " -> " + entry.getValue());
         }

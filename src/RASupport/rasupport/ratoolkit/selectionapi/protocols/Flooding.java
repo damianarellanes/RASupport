@@ -27,20 +27,20 @@ public class Flooding implements SelectionProtocol {
         // Floods the neighborhood of spVisited with query agents
         if(neighborCount > 0) {
                   
-            int countSending = 0;
+            int countNoSending = 0;
             for(MycoNode neighbor: link.getHyphae()) {
                 
                 System.out.println("SP " + spVisited.getAlias() + " tries to send " + queryAgent.getAgentId()  +" to " + neighbor.getAlias());
                 
-                // Sends a clone to a specific neighbor using the query agent prototype
-                // Don't use clone because is slow
+               // Sends a clone to a specific neighbor using the query agent prototype
+               // Don't use clone because is slow
                if(!new QueryAgent(queryAgent).sendTo(neighbor)) {
-                   countSending++;
+                   countNoSending++;
                }
             }
             
             // If the agent wasn't able to send any query agent
-            if(countSending == neighborCount) {
+            if(countNoSending == neighborCount) {
                 queryAgent.returnToSpInitiator();
             }
         }

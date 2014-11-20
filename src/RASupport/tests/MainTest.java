@@ -2,9 +2,14 @@ package RASupport.tests;
 
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
+import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
+import RASupport.rasupport.rasupportconfig.queries.RASupportQueryGroup;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportAttributes;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportDynamicAttributes;
+import static RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportDynamicAttributes.free_mem;
+import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportStaticAttributes;
+import static RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportStaticAttributes.cpu_speed;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportUseRestrictions;
 import RASupport.rasupport.rasupportmain.RASupportMain;
 import RASupport.rasupport.ratoolkit.advertisementapi.AdvertisementAPI;
@@ -23,6 +28,10 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -231,7 +240,7 @@ public class MainTest implements
         //System.gc();
 
         //String path = "/home/damianarellanes/Documentos/CINVESTAV/Tesis/Soporte\\ P2P\\ para\\ la\\ colaboración\\ de\\ recursos/Tesis/Disertación/Figures/Resultados/Anunciamiento";
-        String path = "/home/damianarellanes/Documentos/CINVESTAV/Tesis/Soporte P2P para la colaboración de recursos/Tesis/Disertación/Figures/Resultados/Anunciamiento/cycles.gnu";
+        /*String path = "/home/damianarellanes/Documentos/CINVESTAV/Tesis/Soporte P2P para la colaboración de recursos/Tesis/Disertación/Figures/Resultados/Anunciamiento/cycles.gnu";
         File file = new File(path);
         // if file doesnt exists, then create it
         if (!file.exists()) {
@@ -243,7 +252,59 @@ public class MainTest implements
         BufferedWriter bw = new BufferedWriter(fw);
         bw.append("\nOK");
         bw.close();
-        fw.close();
+        fw.close();*/
+        
+        /*List<String> listA = new ArrayList<String>();
+        listA.add("A");
+
+        List<String> listB = new ArrayList<String>();
+        listB.add("B");
+        listB.add("A");
+
+        List<String> listFinal = new ArrayList<String>();
+        listFinal.addAll(listA);
+        listFinal.addAll(listB);
+
+        System.out.println("listA : " + listA);
+        System.out.println("listB : " + listB);
+        System.out.println("listFinal : " + listFinal);*/
+        
+        /*RASupportMap<String, String> m1 = new RASupportMap<>();
+        m1.put("A", "A");
+        RASupportMap<String, String> m2 = new RASupportMap<>();
+        m2.put("B", "B");
+        m2.put("A", "ABC");
+        RASupportMap<String, String> m3 = new RASupportMap<>();
+        m3.putAll(m1);
+        m3.putAll(m2);
+        
+        System.out.println("listA : " + m1);
+        System.out.println("listB : " + m2);
+        System.out.println("listFinal : " + m3);*/
+        
+        String s1 = "Str";
+        String s2 = "Str";
+        System.out.println(s1.hashCode() == s2.hashCode());
+        
+        RASupportMap<RASupportQueryGroup, RASupportQueryGroup> map = new RASupportMap<>();
+        
+        RASupportQueryGroup g1 = new RASupportQueryGroup("Similar group", 8);
+        g1.addNumericalAttribute(cpu_speed,500.0,2500.0,4096.0,5000.0,0.2);
+        g1.addNumericalAttribute(free_mem, 10.0,1024.0,4096.0,16000.0,0.05);        
+        map.put(g1, g1);
+        
+        RASupportQueryGroup g2 = new RASupportQueryGroup("Similar group", 8);
+        g2.addNumericalAttribute(cpu_speed,500.0,2500.0,4096.0,5000.0,0.2);
+        g2.addNumericalAttribute(free_mem, 10.0,1024.0,4096.0,16000.0,0.05);        
+        //map.put(g2, g2);
+                
+        //System.err.println(g1 == g2);
+        //System.err.println(g1.equals(g2));
+        System.err.println(map.containsKey(g2));
+        
+        System.out.println(g1.hashCode());
+        System.out.println(g2.hashCode());
+        System.out.println(g1.hashCode() == g2.hashCode());
     }
 
 }

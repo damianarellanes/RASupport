@@ -30,17 +30,32 @@ public class ProtocolContext {
                 floodingProtocol.execute(queryAgent, spVisited);
                 break;
             case IRANDOMWALK:
-                //iRandomWalkProtocol.execute(query);
+                iRandomWalkProtocol.execute(queryAgent, spVisited);
                 break;    
             default:
-                //iRandomWalkProtocol.execute(query);
+                iRandomWalkProtocol.execute(queryAgent, spVisited);
                 break;
         }
-    }
-    
+    }    
     
     private QueryAgentsBehaviour getSelectedProtocol(RASupportQueryOptions option) {
         
         return (option.equals(RASupportQueryOptions.FIND_RESOURCES)) ? FLOODING : IRANDOMWALK;
+    }
+    
+    public void processResults(QueryAgent queryAgent) {
+        
+        // Performs a strategy depending on the selected protocol
+        switch(getSelectedProtocol(queryAgent.getQuery().getOption())) {
+            case FLOODING:
+                // TODO process results in flooding protocol
+                break;
+            case IRANDOMWALK:
+                iRandomWalkProtocol.updateStatisticList(queryAgent.getResultSet());
+                break;    
+                
+            default:
+                break;
+        }
     }
 }

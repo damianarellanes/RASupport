@@ -39,6 +39,11 @@ public class Test {
             public RASupportMain getRASupport() {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
+
+            @Override
+            public boolean isSuperpeer() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
         };
 
         @Override
@@ -60,6 +65,11 @@ public class Test {
         public RASupportMain getRASupport() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }        
+
+        @Override
+        public boolean isSuperpeer() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
     }
 
     /**

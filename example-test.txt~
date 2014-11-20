@@ -7,7 +7,7 @@
 config.basename example-test
 
 # Number of peers in the network
-network.size 20
+network.size 30
 # Length of simulation
 simulation.cycles 50
 #simulation.nodefaultcycle

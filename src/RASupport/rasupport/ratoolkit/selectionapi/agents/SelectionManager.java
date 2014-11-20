@@ -77,8 +77,6 @@ public class SelectionManager {
     
     public void receiveQueryAgentResults(QueryAgent queryAgent) {
         
-        // Processes the results from the query agent
-        
         // Notifies the arrival of a query agent to the correct query agents waiter
         queryAgent.notifyArrival();
     }

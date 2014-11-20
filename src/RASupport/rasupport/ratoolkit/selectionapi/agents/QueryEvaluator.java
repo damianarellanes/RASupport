@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import myconet.HyphaLink;
 import myconet.MycoNode;
 
 /**
@@ -69,6 +70,7 @@ public class QueryEvaluator {
             Map<RASupportQueryGroup, String> sqlQueries) {
         
         QueryAgentResult result = new QueryAgentResult(spVisited);
+        HyphaLink link = spVisited.getHyphaLink();
                 
         for(RASupportQueryGroup group: query.getGroups().values()) {                        
             
@@ -78,9 +80,23 @@ public class QueryEvaluator {
                 
                 ResultSet resultForGroup = dbMan.executeQuery(sqlQueries.get(group));
                 
-                ArrayList candidatePeers = new ArrayList<>();
+                ArrayList<MycoNode> candidatePeers = new ArrayList<>();
                 while(resultForGroup.next()) {
-                    candidatePeers.add(resultForGroup.getString("namePeer"));
+                    
+                    String alias = resultForGroup.getString("namePeer");
+                    
+                    if(!alias.equals(spVisited.getAlias())) {
+                        
+                        MycoNode candidate = link.getNeighbor(alias);
+                    
+                        // If the candidate stills available
+                        if(candidate != null) {
+                            candidatePeers.add(candidate);
+                        }
+                    }
+                    else {
+                        candidatePeers.add(spVisited);
+                    }
                 }
                 
                 // Only adds the group to CGv if there are candidate peers

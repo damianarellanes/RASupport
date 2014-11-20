@@ -1,52 +1,18 @@
 package RASupport.rasupport.rasupportconfig.xml;
 
 import RASupport.rasupport.rasupportconfig.common.RASupportCommon;
-import RASupport.rasupport.rasupportconfig.common.RASupportCommon.RASupportQueryReader;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logError;
-import static RASupport.rasupport.rasupportconfig.log.LogManager.logWarning;
+import static RASupport.rasupport.rasupportconfig.log.LogManager.*;
 import RASupport.rasupport.rasupportconfig.modules.RASupportTopologyNode;
-import RASupport.rasupport.rasupportconfig.queries.RASupportGroupRestrictions;
-import RASupport.rasupport.rasupportconfig.queries.RASupportNodeRestrictions;
-import RASupport.rasupport.rasupportconfig.queries.RASupportQuery;
-import RASupport.rasupport.rasupportconfig.queries.RASupportQueryGroup;
-import RASupport.rasupport.rasupportconfig.queries.RASupportQueryOptions;
-import static RASupport.rasupport.rasupportconfig.queries.RASupportQueryOptions.FIND_RESOURCES;
-import static RASupport.rasupport.rasupportconfig.queries.RASupportQueryOptions.PERFORMANCE;
-import RASupport.rasupport.rasupportconfig.queries.RASupportQueryRestrictionSet;
-import RASupport.rasupport.rasupportconfig.queries.RASupportQueryRestrictions;
-import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportAttributesInterface;
-import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportDynamicAttributes;
-import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportStaticAttributes;
-import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportUseRestrictions;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
+import RASupport.rasupport.rasupportconfig.queries.*;
+import static RASupport.rasupport.rasupportconfig.queries.RASupportQueryOptions.*;
+import RASupport.rasupport.rasupportconfig.resourcesmodel.*;
+import static RASupport.rasupport.rasupportconfig.xml.TagsConfiguration.*;
+import java.io.*;
 import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.XMLConstants;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.*;
 import javax.xml.transform.stax.StAXSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
+import javax.xml.validation.*;
 import org.xml.sax.SAXException;
 
 /**
@@ -505,6 +471,39 @@ public class XMLQueryReader {
             }       
         }
         return number;
+    }
+    
+    // The content of a group does not take into account the name, number of nodes and restrictions between nodes
+    // Because those factors are independent of the results of a specific node
+    public static String getGroupContent(RASupportQueryGroup group) {
+        
+        StringBuilder content = new StringBuilder();
+        
+        /*content.append((openQueryGroupNameTag + group.getName() + closeQueryGroupNameTag).trim());
+        content.append((openQueryGroupNodesTag + group.getNum_nodes() + closeQueryGroupNodesTag).trim());*/
+        
+        // Creates tags for the attributes
+        for(RASupportQueryRequirement attribute: group.getAttributes().values()) {
+
+            content.append((createTag(attribute.getAttribute().getAttributeName(), 
+                    attribute.getContent(), "")).trim());
+        }
+            
+        /*// Creates restrictions between nodes
+        RASupportQueryRestrictionSet rbn = group.getNodeRestrictions();
+        if(rbn != null) {
+
+            content.append(openqueryRestrictionNodesTag.trim());
+
+            for(RASupportQueryRequirement restriction: rbn.getRestrictions()) {
+
+                content.append(createTag(restriction.getAttribute().getAttributeName(), 
+                    restriction.getContent(), "").trim());
+            }
+            content.append(closequeryRestrictionNodesTag.trim());
+        }*/
+        
+        return content.toString();
     }
 
 }

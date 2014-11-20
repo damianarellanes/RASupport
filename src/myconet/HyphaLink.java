@@ -713,5 +713,19 @@ public class HyphaLink implements Linkable, CDProtocol, Cleanable {
       l.notifySevering(n, t, degree, parentTarget, neighbors);
     }
   }
+  
+  /* RASUPPORT */
+  public MycoNode getNeighbor(String alias) {
+      
+      for(MycoNode neighbor: neighbors) {
+          
+          if(neighbor.getAlias().equals(alias)) {
+              return neighbor;
+          }
+      }
+      
+      return null;
+  }
+  /* RASUPPORT */
 
 }

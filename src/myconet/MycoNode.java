@@ -197,4 +197,22 @@ public class MycoNode extends GeneralNode implements Node, Comparable, RASupport
     public String getAlias() {
         return "peer" + this.getID();
     }
+    
+    /*// The hash code is determinated by the alias
+    @Override
+    public int hashCode() {        
+        return getAlias().hashCode();
+    }
+    
+    // Two myconodes are equal if they have the same alias
+    @Override
+    public boolean equals(Object o) {
+        
+        return getAlias().equals(((MycoNode)o).getAlias());
+    }*/
+
+    @Override
+    public boolean isSuperpeer() {
+        return isExtending() || isBranching() || isImmobile();
+    }
 }

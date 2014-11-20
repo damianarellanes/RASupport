@@ -3,6 +3,7 @@ package RASupport.rasupport.rasupportconfig.queries;
 import static RASupport.rasupport.rasupportconfig.log.LogManager.logWarning;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.*;
 import RASupport.rasupport.rasupportconfig.resourcesmodel.RASupportMap;
+import RASupport.rasupport.rasupportconfig.xml.XMLQueryReader;
 
 /**
  * RASupport: representation of a group in RASupport
@@ -13,15 +14,12 @@ public class RASupportQueryGroup  {
     // Information about the group
     private String name = "";
     private int num_nodes = 0;
-    
-    // We separate the attributes in static and dynamic to improve scalability 
-    // and manage attributes in a better way
-    /*private RASupportMap<RASupportDynamicAttributes, RASupportQueryRequirement> 
-            dynamicAttributes = null;
-    private RASupportMap<RASupportStaticAttributes, RASupportQueryRequirement>
-            staticAttributes = null;*/
+        
     private RASupportMap<RASupportAttributesInterface, RASupportQueryRequirement>
             attributes = null;
+    
+    // Content of the group
+    private String content = "";
     
     // Restrictions between nodes in the group
     // We can have more than one restriction between nodes in the group
@@ -37,8 +35,20 @@ public class RASupportQueryGroup  {
         this.num_nodes = nodes;
         
         this.attributes =  new RASupportMap();
-        /*this.dynamicAttributes = new RASupportMap<>();
-        this.staticAttributes = new RASupportMap<>();*/
+    }
+    
+    // For prototypes
+    public RASupportQueryGroup(RASupportQueryGroup prototype) {
+        
+        this.name = prototype.getName();
+        this.num_nodes = prototype.getNum_nodes();
+        this.attributes = prototype.getAttributes();
+        this.nodeRestrictions = prototype.getNodeRestrictions();
+    }
+    
+    public String getContent() {
+        
+        return XMLQueryReader.getGroupContent(this);
     }
         
     // Facade to insert a numerical requirement
@@ -168,6 +178,33 @@ public class RASupportQueryGroup  {
      */
     public void setNum_nodes(int num_nodes) {
         this.num_nodes = num_nodes;
+    }
+    
+    public int getNumAttributes() {
+        return attributes.size();
+    }
+    
+    public boolean containsAttribute(RASupportAttributesInterface attribute) {
+        
+        return attributes.containsKey(attribute);
+    }
+    
+    public RASupportQueryRequirement getAttribute(RASupportAttributesInterface attribute) {
+        
+        return attributes.get(attribute);
+    }
+    
+    // The hash code is determinated by the string representation
+    @Override
+    public int hashCode() {        
+        return toString().hashCode();
+    }
+    
+    // Two groups are equal if they have the same string representation
+    @Override
+    public boolean equals(Object o) {
+        
+        return o.toString().equals(toString());
     }
 
 }
